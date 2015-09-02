@@ -2,5 +2,6 @@
     <string name="app_name">We Care</string>
 
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+
+    <string name="internet_problem">No internet access, please check your internet connection.</string>
 </resources>
