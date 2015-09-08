@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.util.SparseArray;
 
 import com.antrromet.wecare.fragments.BaseFragment;
+import com.antrromet.wecare.fragments.FeaturedFragment;
 
 public class MainActivityPagerAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 3;

@@ -1,7 +1,17 @@
 <resources>
     <string name="app_name">We Care</string>
 
-    <string name="hello_world">Hello world!</string>
-
     <string name="internet_problem">No internet access, please check your internet connection.</string>
+    <string name="unknown_problem">Oops&#8230;something went wrong. Please try again in
+        sometime.</string>
+    <string name="activities">Activities</string>
+    <string name="contacts">Contacts</string>
+    <string name="website">Website</string>
+    <string name="email">Email</string>
+    <string name="facebook">Facebook</string>
+    <string name="twitter">Twitter</string>
+    <string name="progress">Progress - %1$s%%</string>
+    <string name="starts_on">Started On</string>
+    <string name="ends_on">Ends On</string>
+
 </resources>

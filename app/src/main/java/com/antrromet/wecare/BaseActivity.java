@@ -1,15 +1,15 @@
-package com.antrromet.wecare.fragments;
+package com.antrromet.wecare;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
@@ -22,25 +22,24 @@ import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.antrromet.wecare.Application;
-import com.antrromet.wecare.BaseActivity;
-import com.antrromet.wecare.Constants;
-import com.antrromet.wecare.R;
 import com.antrromet.wecare.interfaces.OnVolleyResponseListener;
 import com.antrromet.wecare.utils.Logger;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-public class BaseFragment extends Fragment {
+/**
+ * Base class to display action bar
+ */
+@SuppressLint("Registered")
+public class BaseActivity extends AppCompatActivity {
 
     protected static final String TAG = BaseActivity.class.getSimpleName();
     private OnVolleyResponseListener mVolleyListener;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        return super.onCreateView(inflater, container, savedInstanceState);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
     }
 
     /**
@@ -49,21 +48,17 @@ public class BaseFragment extends Fragment {
      * @return true if internet is present else return false
      */
     protected boolean isNetworkAvailable() {
-        if (getActivity() != null) {
-            final ConnectivityManager conMgr = (ConnectivityManager) getActivity()
-                    .getSystemService(Context.CONNECTIVITY_SERVICE);
-            final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
-            if (activeNetwork != null && activeNetwork.isConnected()) {
-                return true;
-            } else {
-                showToast(getString(R.string.internet_problem));
-                return false;
-            }
+        final ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        final NetworkInfo activeNetwork = conMgr.getActiveNetworkInfo();
+        if (activeNetwork != null && activeNetwork.isConnected()) {
+            return true;
+        } else {
+            showToast(getString(R.string.internet_problem));
+            return false;
         }
-        return false;
     }
 
-    protected void setVolleyListener(OnVolleyResponseListener listener) {
+    protected void setVolleyListener(@NonNull OnVolleyResponseListener listener) {
         mVolleyListener = listener;
     }
 
@@ -74,9 +69,9 @@ public class BaseFragment extends Fragment {
         hideKeyboard();
 
         if (isNetworkAvailable() && !Application.containsRequest(tag)) {
-            final ProgressDialog pDialog = new ProgressDialog(getActivity());
-            pDialog.setCancelable(false);
+            final ProgressDialog pDialog = new ProgressDialog(this);
             pDialog.setMessage(alertMsgDisplay);
+            pDialog.setCancelable(false);
             if (showProgressDialog && !TextUtils.isEmpty(alertMsgDisplay)) {
                 pDialog.show();
             }
@@ -90,7 +85,9 @@ public class BaseFragment extends Fragment {
 
                         @Override
                         public void onResponse(JSONObject response) {
-                            hideActionBarProgress(tag);
+                            Logger.d(TAG, response.toString());
+                            Application.removeFromQueue(tag);
+                            hideActionBarProgress();
                             pDialog.dismiss();
                             mVolleyListener.OnSuccess(tag, response);
                         }
@@ -98,13 +95,15 @@ public class BaseFragment extends Fragment {
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    hideActionBarProgress(tag);
+                    Application.removeFromQueue(tag);
+                    hideActionBarProgress();
                     Logger.e(TAG, "Error: " + error.getMessage());
                     if (error instanceof NoConnectionError || error instanceof TimeoutError) {
                         showToast(getString(R.string.internet_problem));
                     } else {
                         showToast(error.getMessage());
                     }
+
                     pDialog.dismiss();
                     mVolleyListener.OnError(tag, error);
                 }
@@ -115,27 +114,25 @@ public class BaseFragment extends Fragment {
     }
 
     public void requestVolley(final Constants.VolleyTags tag, String url,
-                              String alertMsgDisplay, boolean showProgressDialog) {
+                              String alertMsgDisplay, boolean showActionBarProgress) {
         Logger.d(TAG, url);
         hideKeyboard();
 
         if (isNetworkAvailable() && !Application.containsRequest(tag)) {
-            final ProgressDialog pDialog = new ProgressDialog(getActivity());
+            final ProgressDialog pDialog = new ProgressDialog(this);
             pDialog.setCancelable(false);
-            pDialog.setMessage(alertMsgDisplay);
-            if (showProgressDialog && !TextUtils.isEmpty(alertMsgDisplay)) {
+            if (!showActionBarProgress && !TextUtils.isEmpty(alertMsgDisplay)) {
                 pDialog.show();
             }
-            if (!showProgressDialog) {
-                showActionBarProgress();
-            }
+            pDialog.setMessage(alertMsgDisplay);
+            pDialog.show();
 
             JsonArrayRequest jsonObjRequest = new JsonArrayRequest(url,
                     new Listener<JSONArray>() {
 
                         @Override
                         public void onResponse(JSONArray response) {
-                            hideActionBarProgress(tag);
+                            Application.removeFromQueue(tag);
                             pDialog.dismiss();
                             Logger.d(TAG, response.toString());
                             mVolleyListener.OnSuccess(tag, response);
@@ -144,7 +141,7 @@ public class BaseFragment extends Fragment {
 
                 @Override
                 public void onErrorResponse(VolleyError error) {
-                    hideActionBarProgress(tag);
+                    Application.removeFromQueue(tag);
                     Logger.e(TAG, "Error: " + error.getMessage());
                     if (error instanceof NoConnectionError || error instanceof TimeoutError) {
                         showToast(getString(R.string.internet_problem));
@@ -168,36 +165,33 @@ public class BaseFragment extends Fragment {
      * Hide the keyboard from whichever view has the focus
      */
     protected void hideKeyboard() {
-        if (getActivity() != null) {
-            // Check if no view has focus:
-            View view = getActivity().getCurrentFocus();
-            if (view != null) {
-                InputMethodManager inputManager = (InputMethodManager) getActivity()
-                        .getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.hideSoftInputFromWindow(view.getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
-            }
+        // Check if no view has focus:
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager inputManager = (InputMethodManager) this
+                    .getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.hideSoftInputFromWindow(view.getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
         }
     }
 
     protected void showToast(String message) {
-        if (getActivity() != null && !TextUtils.isEmpty(message)) {
-            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        if (!TextUtils.isEmpty(message)) {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }
     }
 
     private void showActionBarProgress() {
-        if (getActivity() != null) {
-            getActivity().findViewById(R.id.actionbar_layout).findViewById(R.id.toolbar_progress_bar)
+        if (findViewById(R.id.actionbar_layout) != null) {
+            findViewById(R.id.actionbar_layout).findViewById(R.id.toolbar_progress_bar)
                     .setVisibility(View.VISIBLE);
         }
     }
 
-    private void hideActionBarProgress(Constants.VolleyTags tag) {
-        Application.removeFromQueue(tag);
-        if (getActivity() != null) {
-            if (Application.isQueueEmpty()) {
-                getActivity().findViewById(R.id.actionbar_layout).findViewById(R.id.toolbar_progress_bar)
+    private void hideActionBarProgress() {
+        if (Application.isQueueEmpty()) {
+            if (findViewById(R.id.actionbar_layout) != null) {
+                findViewById(R.id.actionbar_layout).findViewById(R.id.toolbar_progress_bar)
                         .setVisibility(View.GONE);
             }
         }
