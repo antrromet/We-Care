@@ -10,8 +10,8 @@ import com.antrromet.wecare.fragments.BaseFragment;
 import com.antrromet.wecare.fragments.FeaturedFragment;
 
 public class MainActivityPagerAdapter extends FragmentPagerAdapter {
-    final int PAGE_COUNT = 3;
-    private String tabTitles[] = new String[]{"Featured", "Tab2", "Tab3"};
+    final int PAGE_COUNT = 2;
+    private String tabTitles[] = new String[]{"Campaigns", "NGOs"};
     private Context context;
     private SparseArray<BaseFragment> fragments;
 
@@ -38,9 +38,8 @@ public class MainActivityPagerAdapter extends FragmentPagerAdapter {
                     break;
                 }
 
-                case 1:
-                case 2: {
-                    fragment =  PageFragment.newInstance(position);
+                case 1: {
+                    fragment = PageFragment.newInstance(position);
                     fragments.put(1, fragment);
                     break;
                 }
