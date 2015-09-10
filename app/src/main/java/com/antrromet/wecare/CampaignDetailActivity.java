@@ -132,6 +132,7 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
                 mCampaign.setSubTitle(data.getString(data.getColumnIndex(DBOpenHelper.COLUMN_SUB_TITLE)));
                 mCampaign.setUrl(data.getString(data.getColumnIndex(DBOpenHelper.COLUMN_URL)));
                 Logger.d(TAG, "Loaded campaign object");
+                setDataToViews();
             }
         } else if (loader.getId() == Constants.Loaders.ACTIVITIES.id) {
             if (data != null && data.moveToFirst()) {
@@ -151,6 +152,7 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
                     activities.add(activity);
                 } while (data.moveToNext());
                 mCampaign.setActivities(activities);
+                setDataToViews();
             }
             Logger.d(TAG, "Loaded activities");
         } else if (loader.getId() == Constants.Loaders.CONTACTS.id) {
@@ -167,10 +169,10 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
                 contact.setFbLink(data.getString(data.getColumnIndex(DBOpenHelper
                         .COLUMN_FB_LINK)));
                 mCampaign.setContact(contact);
+                setDataToViews();
             }
             Logger.d(TAG, "Loaded contacts");
         }
-        setDataToViews();
     }
 
     @Override
