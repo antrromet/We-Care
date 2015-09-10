@@ -116,8 +116,6 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
                 mCampaign.setAbout(data.getString(data.getColumnIndex(DBOpenHelper.COLUMN_ABOUT)));
                 getSupportLoaderManager().restartLoader(Constants.Loaders.ACTIVITIES.id,
                         null, this);
-                getSupportLoaderManager().restartLoader(Constants.Loaders.CONTACTS.id,
-                        null, this);
                 mCampaign.setImg(data.getString(data.getColumnIndex(DBOpenHelper.COLUMN_IMG)));
                 mCampaign.setStartsOn(data.getString(data.getColumnIndex(DBOpenHelper.COLUMN_STARTS_ON)));
                 mCampaign.setEndsOn(data.getString(data.getColumnIndex(DBOpenHelper.COLUMN_ENDS_ON)));
@@ -132,7 +130,6 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
                 mCampaign.setSubTitle(data.getString(data.getColumnIndex(DBOpenHelper.COLUMN_SUB_TITLE)));
                 mCampaign.setUrl(data.getString(data.getColumnIndex(DBOpenHelper.COLUMN_URL)));
                 Logger.d(TAG, "Loaded campaign object");
-                setDataToViews();
             }
         } else if (loader.getId() == Constants.Loaders.ACTIVITIES.id) {
             if (data != null && data.moveToFirst()) {
@@ -152,9 +149,10 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
                     activities.add(activity);
                 } while (data.moveToNext());
                 mCampaign.setActivities(activities);
-                setDataToViews();
             }
             Logger.d(TAG, "Loaded activities");
+            getSupportLoaderManager().restartLoader(Constants.Loaders.CONTACTS.id,
+                    null, this);
         } else if (loader.getId() == Constants.Loaders.CONTACTS.id) {
             if (data != null && data.moveToFirst()) {
                 Contact contact = new Contact();
@@ -169,9 +167,11 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
                 contact.setFbLink(data.getString(data.getColumnIndex(DBOpenHelper
                         .COLUMN_FB_LINK)));
                 mCampaign.setContact(contact);
-                setDataToViews();
             }
             Logger.d(TAG, "Loaded contacts");
+            if (mCampaign != null) {
+                setDataToViews();
+            }
         }
     }
 
