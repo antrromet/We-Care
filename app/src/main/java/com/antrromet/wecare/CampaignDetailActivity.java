@@ -2,22 +2,30 @@ package com.antrromet.wecare;
 
 import android.content.ContentValues;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Display;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -38,6 +46,8 @@ import com.antrromet.wecare.utils.JSONUtils;
 import com.antrromet.wecare.utils.Logger;
 import com.antrromet.wecare.widgets.MyLinearLayoutManager;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -55,6 +65,7 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
     private String mCampaignId;
     private CampaignDetail mCampaign;
     private ImageLoader mImageLoader;
+    private CollapsingToolbarLayout mCollapsingToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,24 +81,18 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
 
         mImageLoader = ImageLoader.getInstance();
 
-        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
-        Display display = getWindowManager().getDefaultDisplay();
-        Point size = new Point();
-        display.getSize(size);
-        params.height = size.x;
-        appBarLayout.setLayoutParams(params);
-
+        setAppBarLayoutHeight();
 
         // Setup the toolbar
         Toolbar toolBar = (Toolbar) findViewById(R.id.actionbar_layout);
-//        toolBar.setTitle(getIntent().getStringExtra(Constants.ParamsKeys.NAME.key));
         setSupportActionBar(toolBar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(getIntent().getStringExtra(Constants.ParamsKeys.NAME.key));
+        mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        mCollapsingToolbar.setTitle(getIntent().getStringExtra(Constants.ParamsKeys.NAME.key));
+//        mCollapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color
+//                .transparent));
 
         // Load the local cached data
         getSupportLoaderManager().restartLoader(Constants.Loaders.CAMPAIGN_DETAILS.id,
@@ -96,6 +101,16 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
         // Request for the latest campaign details
         setVolleyListener(this);
         requestCampaignDetail();
+    }
+
+    private void setAppBarLayoutHeight() {
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        params.height = size.x;
+        appBarLayout.setLayoutParams(params);
     }
 
     /**
@@ -207,11 +222,50 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
      */
     private void setDataToViews() {
         mImageLoader.displayImage(mCampaign.getImg(), (ImageView) findViewById(R.id
-                .poster_image));
+                .poster_image), new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                Palette.from(loadedImage).generate(new Palette.PaletteAsyncListener() {
+                    @Override
+                    public void onGenerated(Palette palette) {
+                        mCollapsingToolbar.setContentScrimColor(palette.getMutedColor(ContextCompat.getColor
+                                (CampaignDetailActivity.this, R.color.primary)));
+                        mCollapsingToolbar.setStatusBarScrimColor(palette.getDarkVibrantColor(ContextCompat
+                                .getColor(CampaignDetailActivity.this, R.color.dark_primary)));
+                        ((FloatingActionButton) findViewById(R.id.fab)).setRippleColor(palette
+                                .getLightVibrantColor((ContextCompat.getColor
+                                        (CampaignDetailActivity.this, R.color.light_accent))));
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            findViewById(R.id.fab).setBackgroundTintList
+                                    (ColorStateList.valueOf(palette.getVibrantColor(
+                                            (ContextCompat.getColor(CampaignDetailActivity.this, R.color
+                                                    .accent)))));
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
         ((TextView) findViewById(R.id.about_text)).setText(mCampaign.getAbout());
 
         if (mCampaign.getActivities() == null || mCampaign.getActivities().isEmpty()) {
-            findViewById(R.id.activities_layout).setVisibility(View.GONE);
+            findViewById(R.id.activities_recyclerview).setVisibility(View.GONE);
+            findViewById(R.id.activities_divider).setVisibility(View.GONE);
+            findViewById(R.id.activities_title).setVisibility(View.GONE);
         } else {
             ActivitiesAdapter activityAdapter = new ActivitiesAdapter();
             activityAdapter.setData(mCampaign.getActivities());
@@ -222,19 +276,10 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
             activitiesRecyclerView.setLayoutManager(mLayoutManager);
             activitiesRecyclerView.setItemAnimator(new DefaultItemAnimator());
             activitiesRecyclerView.setAdapter(activityAdapter);
-            findViewById(R.id.activities_layout).setVisibility(View.VISIBLE);
+            findViewById(R.id.activities_recyclerview).setVisibility(View.VISIBLE);
+            findViewById(R.id.activities_divider).setVisibility(View.VISIBLE);
+            findViewById(R.id.activities_title).setVisibility(View.VISIBLE);
         }
-
-        if (mCampaign.getContact() == null) {
-            findViewById(R.id.contacts_layout).setVisibility(View.GONE);
-        } else {
-            findViewById(R.id.contacts_layout).setVisibility(View.VISIBLE);
-        }
-
-        findViewById(R.id.website_layout).setOnClickListener(this);
-        findViewById(R.id.email_layout).setOnClickListener(this);
-        findViewById(R.id.facebook_layout).setOnClickListener(this);
-        findViewById(R.id.twitter_layout).setOnClickListener(this);
 
         ((TextView) findViewById(R.id.progress_text)).setText(getString(R.string
                 .progress, mCampaign.getProgress()));
@@ -247,15 +292,16 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
             Date startDate = dateFormatter.parse(mCampaign.getStartsOn());
             Date endDate = dateFormatter.parse(mCampaign.getEndsOn());
 
-            dateFormatter = new SimpleDateFormat("dd MMM yyyy", Locale
+            dateFormatter = new SimpleDateFormat("MMM dd, hh:mm a", Locale
                     .getDefault());
-            ((TextView) findViewById(R.id.starts_on_text)).setText(dateFormatter.format(startDate));
-            ((TextView) findViewById(R.id.ends_on_text)).setText(dateFormatter.format(endDate));
+            ((TextView) findViewById(R.id.duration_text)).setText(dateFormatter.format(startDate)
+                    + " - " + dateFormatter.format(endDate));
+            findViewById(R.id.duration_text).setVisibility(View.VISIBLE);
         } catch (ParseException e) {
             e.printStackTrace();
-            findViewById(R.id.date_layout).setVisibility(View.GONE);
+            findViewById(R.id.duration_text).setVisibility(View.GONE);
         }
-
+        findViewById(R.id.fab).setOnClickListener(this);
     }
 
     /**
@@ -416,21 +462,35 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
+        } else if (item.getItemId() == R.id.website) {
+            launchWebViewActivity(mCampaign.getContact().getWebsite());
+            return true;
+        } else if (item.getItemId() == R.id.mail) {
+            launchEmailClient(mCampaign.getContact().getEmail());
+            return true;
+        } else if (item.getItemId() == R.id.facebook) {
+            launchWebPage(mCampaign.getContact().getFbLink());
+            return true;
+        } else if (item.getItemId() == R.id.twitter) {
+            launchWebPage(mCampaign.getContact().getTwitterLink());
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.website_layout) {
-            launchWebViewActivity(mCampaign.getContact().getWebsite());
-        } else if (v.getId() == R.id.email_layout) {
-            launchEmailClient(mCampaign.getContact().getEmail());
-        } else if (v.getId() == R.id.facebook_layout) {
-            launchWebPage(mCampaign.getContact().getFbLink());
-        } else if (v.getId() == R.id.twitter_layout) {
-            launchWebPage(mCampaign.getContact().getTwitterLink());
+        if (v.getId() == R.id.fab) {
+            shareCampaign();
         }
+    }
+
+    private void shareCampaign() {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, mCampaign.getUrl());
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
     }
 
     /**
@@ -465,4 +525,12 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
         intent.setData(Uri.parse(url));
         startActivity(intent);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.contacts, menu);
+        return true;
+    }
+
 }

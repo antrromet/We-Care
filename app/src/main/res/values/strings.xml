@@ -13,5 +13,7 @@
     <string name="progress">Progress - %1$s%%</string>
     <string name="starts_on">Started On</string>
     <string name="ends_on">Ends On</string>
+    <string name="about">About</string>
+    <string name="duration">Duration</string>
 
 </resources>

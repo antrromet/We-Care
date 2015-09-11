@@ -10,6 +10,7 @@
     <color name="secondary_text">#727272</color>
     <color name="divider">#B6B6B6</color>
     <color name="accent">#7C4DFF</color>
+    <color name="light_accent">#AB47BC</color>
     <color name="semi_transparent">#B2000000</color>
     <color name="translucent">#B2FFFFFF</color>
 

@@ -26,7 +26,7 @@
             <ImageView
                 android:id="@+id/poster_image"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:adjustViewBounds="true"
                 android:contentDescription="@string/app_name"
                 android:fitsSystemWindows="true"
@@ -37,9 +37,9 @@
                 android:id="@+id/actionbar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
                 android:theme="@style/ToolbarTheme"
-                app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+                app:layout_collapseMode="pin"
+                app:popupTheme="@style/ToolbarTheme">
 
                 <ProgressBar
                     android:id="@+id/toolbar_progress_bar"
@@ -66,239 +66,118 @@
             android:descendantFocusability="blocksDescendants"
             android:orientation="vertical">
 
-            <!--<com.antrromet.wecare.widgets.SquaredImageView-->
-            <!--android:id="@+id/poster_image"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:adjustViewBounds="true"-->
-            <!--android:contentDescription="@string/app_name"-->
-            <!--android:scaleType="centerCrop"/>-->
+            <TextView
+                android:id="@+id/duration_title_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:text="@string/duration"
+                android:textColor="@color/primary_text"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
 
+            <TextView
+                android:id="@+id/duration_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/primary_text"
+                android:textSize="20sp"/>
+
+            <View
+                android:id="@+id/duration_divider"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:background="@color/divider"/>
+
+            <TextView
+                android:id="@+id/about_title_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:text="@string/about"
+                android:textColor="@color/primary_text"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
 
             <TextView
                 android:id="@+id/about_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:textColor="@color/primary_text"
                 android:textSize="20sp"/>
 
             <View
+                android:id="@+id/acout_divider"
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
                 android:background="@color/divider"/>
 
-            <LinearLayout
-                android:id="@+id/activities_layout"
+
+            <TextView
+                android:id="@+id/activities_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/activities"
+                android:textColor="@color/primary_text"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/activities_recyclerview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/activities"
-                    android:textColor="@color/primary_text"
-                    android:textSize="18sp"
-                    android:textStyle="bold"/>
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/activities_recyclerview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:overScrollMode="never"/>
-            </LinearLayout>
+                android:layout_marginBottom="10dp"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"/>
 
             <View
+                android:id="@+id/activities_divider"
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
                 android:background="@color/divider"/>
 
-            <LinearLayout
-                android:id="@+id/contacts_layout"
+            <TextView
+                android:id="@+id/progress_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="10dp"
+                android:text="@string/progress"
+                android:textColor="@color/primary_text"
+                android:textSize="18sp"
+                android:textStyle="bold"/>
+
+            <ProgressBar
+                android:id="@+id/progress"
+                style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"/>
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/contacts"
-                    android:textColor="@color/primary_text"
-                    android:textSize="18sp"
-                    android:textStyle="bold"/>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:baselineAligned="false">
-
-                    <LinearLayout
-                        android:id="@+id/website_layout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@drawable/ripple"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:adjustViewBounds="true"
-                            android:contentDescription="@string/website"
-                            android:padding="3dp"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/link"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/email_layout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@drawable/ripple"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:adjustViewBounds="true"
-                            android:contentDescription="@string/email"
-                            android:padding="3dp"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/mail"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/facebook_layout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@drawable/ripple"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:adjustViewBounds="true"
-                            android:contentDescription="@string/facebook"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/facebook"/>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/twitter_layout"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:background="@drawable/ripple"
-                        android:gravity="center">
-
-                        <ImageView
-                            android:layout_width="50dp"
-                            android:layout_height="50dp"
-                            android:adjustViewBounds="true"
-                            android:contentDescription="@string/twitter"
-                            android:scaleType="centerCrop"
-                            android:src="@mipmap/twitter"/>
-                    </LinearLayout>
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="@color/divider"/>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="10dp">
-
-                <TextView
-                    android:id="@+id/progress_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="10dp"
-                    android:text="@string/progress"
-                    android:textColor="@color/primary_text"
-                    android:textSize="18sp"
-                    android:textStyle="bold"/>
-
-                <ProgressBar
-                    android:id="@+id/progress"
-                    style="?android:attr/progressBarStyleHorizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
-
-                <TableLayout
-                    android:id="@+id/date_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="7dp"
-                    android:stretchColumns="1">
-
-                    <TableRow
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/starts_on"
-                            android:textColor="@color/secondary_text"
-                            android:textSize="18sp"/>
-
-                        <TextView
-                            android:id="@+id/starts_on_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="10dp"
-                            android:textColor="@color/primary_text"
-                            android:textSize="18sp"/>
-                    </TableRow>
-
-                    <TableRow
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/ends_on"
-                            android:textColor="@color/secondary_text"
-                            android:textSize="18sp"/>
-
-                        <TextView
-                            android:id="@+id/ends_on_text"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:paddingLeft="10dp"
-                            android:textColor="@color/primary_text"
-                            android:textSize="18sp"/>
-                    </TableRow>
-
-
-                </TableLayout>
-
-            </LinearLayout>
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:clickable="true"
-        android:src="@mipmap/ic_launcher"
+        android:src="@drawable/share"
         app:layout_anchor="@+id/appbar"
         app:layout_anchorGravity="bottom|right|end"/>
 

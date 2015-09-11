@@ -8,7 +8,7 @@
     android:layout_height="wrap_content"
     android:layout_gravity="center"
     card_view:cardCornerRadius="2dp"
-    card_view:cardElevation="4dp">
+    card_view:cardElevation="3dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
