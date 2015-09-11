@@ -182,7 +182,8 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     private void showActionBarProgress() {
-        if (findViewById(R.id.actionbar_layout) != null) {
+        if (findViewById(R.id.actionbar_layout) != null && findViewById(R.id.actionbar_layout)
+                .findViewById(R.id.toolbar_progress_bar) != null) {
             findViewById(R.id.actionbar_layout).findViewById(R.id.toolbar_progress_bar)
                     .setVisibility(View.VISIBLE);
         }
@@ -190,7 +191,8 @@ public class BaseActivity extends AppCompatActivity {
 
     private void hideActionBarProgress() {
         if (Application.isQueueEmpty()) {
-            if (findViewById(R.id.actionbar_layout) != null) {
+            if (findViewById(R.id.actionbar_layout) != null && findViewById(R.id
+                    .actionbar_layout).findViewById(R.id.toolbar_progress_bar) != null) {
                 findViewById(R.id.actionbar_layout).findViewById(R.id.toolbar_progress_bar)
                         .setVisibility(View.GONE);
             }

@@ -3,8 +3,12 @@ package com.antrromet.wecare;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -13,9 +17,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.Display;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -31,7 +37,6 @@ import com.antrromet.wecare.provider.DBProvider;
 import com.antrromet.wecare.utils.JSONUtils;
 import com.antrromet.wecare.utils.Logger;
 import com.antrromet.wecare.widgets.MyLinearLayoutManager;
-import com.antrromet.wecare.widgets.SquaredImageView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONArray;
@@ -54,7 +59,7 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_campaign_detail);
+        setContentView(R.layout.activity_test_detail);
 
         mCampaignId = getIntent().getStringExtra(Constants.ParamsKeys._ID.key);
         // Precaution : Just in case the id is null
@@ -65,13 +70,24 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
 
         mImageLoader = ImageLoader.getInstance();
 
+        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+        Display display = getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        params.height = size.x;
+        appBarLayout.setLayoutParams(params);
+
+
         // Setup the toolbar
         Toolbar toolBar = (Toolbar) findViewById(R.id.actionbar_layout);
-        toolBar.setTitle(getIntent().getStringExtra(Constants.ParamsKeys.NAME.key));
+//        toolBar.setTitle(getIntent().getStringExtra(Constants.ParamsKeys.NAME.key));
         setSupportActionBar(toolBar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        CollapsingToolbarLayout collapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+        collapsingToolbar.setTitle(getIntent().getStringExtra(Constants.ParamsKeys.NAME.key));
 
         // Load the local cached data
         getSupportLoaderManager().restartLoader(Constants.Loaders.CAMPAIGN_DETAILS.id,
@@ -190,7 +206,7 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
      * Set the data to the views
      */
     private void setDataToViews() {
-        mImageLoader.displayImage(mCampaign.getImg(), (SquaredImageView) findViewById(R.id
+        mImageLoader.displayImage(mCampaign.getImg(), (ImageView) findViewById(R.id
                 .poster_image));
         ((TextView) findViewById(R.id.about_text)).setText(mCampaign.getAbout());
 
