@@ -21,6 +21,7 @@ import java.util.Locale;
 
 public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private OnWebLinkClickListener mOnWebLinkClickListener;
     private CampaignDetail mCampaign;
     private Context mContext;
 
@@ -35,11 +36,12 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public int getItemCount() {
-        if(mCampaign == null){
+        if (mCampaign == null) {
             return 0;
         }
-        return 3;
+        return 4;
     }
+
 
     @Override
     public int getItemViewType(int position) {
@@ -52,16 +54,20 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         switch (viewType) {
             case 0:
                 view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_type_progress, parent, false);
-                return new ProgressViewHolder(view);
-            case 1:
-                view = LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_type_about, parent, false);
+                        .inflate(R.layout.item_type_title, parent, false);
                 return new AboutViewHolder(view);
-            case 2:
+            case 1:
                 view = LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_type_activities, parent, false);
                 return new ActivitiesViewHolder(view);
+            case 2:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_type_progress, parent, false);
+                return new ProgressViewHolder(view);
+            case 3:
+                view = LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_type_contact, parent, false);
+                return new ContactViewHolder(view);
         }
         return null;
     }
@@ -69,10 +75,8 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         switch (position) {
+
             case 0: {
-                ((ProgressViewHolder) holder).progress.setProgress(mCampaign.getProgress());
-                ((ProgressViewHolder) holder).progressText.setText(mContext.getString(R.string
-                        .progress, mCampaign.getProgress()));
                 try {
                     SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale
                             .getDefault());
@@ -82,25 +86,47 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
                     dateFormatter = new SimpleDateFormat("MMM dd", Locale
                             .getDefault());
-                    ((ProgressViewHolder) holder).durationText.setText(dateFormatter.format(startDate)
+                    ((AboutViewHolder) holder).durationText.setText(dateFormatter.format(startDate)
                             + " - " + dateFormatter.format(endDate));
                 } catch (ParseException e) {
                     e.printStackTrace();
-                    ((ProgressViewHolder) holder).durationText.setText("");
+                    ((AboutViewHolder) holder).durationText.setText("");
                 }
+                ((AboutViewHolder) holder).aboutText.setText(mCampaign.getAbout());
+                ((AboutViewHolder) holder).titleText.setText(mCampaign.getName());
                 break;
             }
 
             case 1: {
-                ((AboutViewHolder) holder).subTitleText.setText(mCampaign.getAbout());
-                break;
-            }
-
-            case 2: {
                 ((ActivitiesViewHolder) holder).activityAdapter.setData(mCampaign.getActivities());
                 break;
             }
+            case 2: {
+                ((ProgressViewHolder) holder).progress.setProgress(mCampaign.getProgress());
+                ((ProgressViewHolder) holder).progressText.setText(mContext.getString(R.string
+                        .progress, mCampaign.getProgress()));
+                break;
+            }
+            case 3: {
+                ((ContactViewHolder) holder).websiteText.setText(mContext.getString(R.string
+                        .website, mCampaign.getContact().getWebsite()));
+                ((ContactViewHolder) holder).emailText.setText(mContext.getString(R.string
+                        .email, mCampaign.getContact().getEmail()));
+                ((ContactViewHolder) holder).facebookText.setText(mContext.getString(R.string
+                        .facebook, mCampaign.getContact().getFbLink()));
+                ((ContactViewHolder) holder).twitterText.setText(mContext.getString(R.string
+                        .twitter, mCampaign.getContact().getTwitterLink()));
+                break;
+            }
         }
+    }
+
+    public void setOnWebLinkClickListener(OnWebLinkClickListener onWebLinkClickListener) {
+        mOnWebLinkClickListener = onWebLinkClickListener;
+    }
+
+    public interface OnWebLinkClickListener {
+        void onWebLinkClick(View view, String link);
     }
 
     public class ActivitiesViewHolder extends RecyclerView.ViewHolder {
@@ -125,28 +151,53 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     public class AboutViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView subTitleText;
+        private TextView durationText;
+        private TextView titleText;
+        private TextView aboutText;
 
         public AboutViewHolder(View view) {
             super(view);
-            subTitleText = (TextView) view.findViewById(R.id.subtitle_text);
+            durationText = (TextView) view.findViewById(R.id.duration_text);
+            titleText = (TextView) view.findViewById(R.id.title_text);
+            aboutText = (TextView) view.findViewById(R.id.about_text);
         }
 
     }
 
     public class ProgressViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView durationText;
         private TextView progressText;
         private ProgressBar progress;
 
         public ProgressViewHolder(View view) {
             super(view);
-            durationText = (TextView) view.findViewById(R.id.duration_text);
             progressText = (TextView) view.findViewById(R.id.progress_text);
             progress = (ProgressBar) view.findViewById(R.id.progress);
         }
 
+    }
+
+    public class ContactViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        private TextView websiteText;
+        private TextView emailText;
+        private TextView facebookText;
+        private TextView twitterText;
+
+        public ContactViewHolder(View view) {
+            super(view);
+            websiteText = (TextView) view.findViewById(R.id.website_text);
+            emailText = (TextView) view.findViewById(R.id.email_text);
+            facebookText = (TextView) view.findViewById(R.id.facebook_text);
+            twitterText = (TextView) view.findViewById(R.id.twitter_text);
+
+            websiteText.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            mOnWebLinkClickListener.onWebLinkClick(v, mCampaign.getContact().getWebsite());
+        }
     }
 
 }

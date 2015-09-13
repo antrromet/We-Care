@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.android.volley.VolleyError;
-import com.antrromet.wecare.CampaignDetailTestActivity;
+import com.antrromet.wecare.CampaignDetailActivity;
 import com.antrromet.wecare.Constants;
 import com.antrromet.wecare.R;
 import com.antrromet.wecare.adapters.CampaignAdapter;
@@ -32,7 +32,7 @@ import java.util.ArrayList;
 /**
  * Created by Antrromet on 9/1/15 9:02 PM
  */
-public class FeaturedFragment extends BaseFragment implements OnVolleyResponseListener,
+public class CampaignsFragment extends BaseFragment implements OnVolleyResponseListener,
         LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
 
     private ArrayList<Campaign> mCampaigns;
@@ -41,7 +41,7 @@ public class FeaturedFragment extends BaseFragment implements OnVolleyResponseLi
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_featured, container, false);
+        View view = inflater.inflate(R.layout.fragment_campaigns, container, false);
 
 
         // Request for campaigns
@@ -49,7 +49,6 @@ public class FeaturedFragment extends BaseFragment implements OnVolleyResponseLi
         setVolleyListener(this);
         requestCampaigns();
 
-//        insertDummyData();
         // Load the local cached data
         getActivity().getSupportLoaderManager().restartLoader(Constants.Loaders.CAMPAIGNS.id,
                 null, this);
@@ -144,152 +143,6 @@ public class FeaturedFragment extends BaseFragment implements OnVolleyResponseLi
         campaign.setUrl(value.getAsString(DBOpenHelper.COLUMN_URL));
     }
 
-    private void insertDummyData() {
-        ContentValues value = new ContentValues();
-
-        value.put(DBOpenHelper.COLUMN_ID,
-                110001);
-        value.put(DBOpenHelper.COLUMN_NAME, "Udaan");
-        value.put(DBOpenHelper.COLUMN_SHORT_DESC, "Rise and fly ");
-        value.put(DBOpenHelper.COLUMN_URL, "http://campaignindia-funlab.rhcloud.com/campaign/c11001");
-        value.put(DBOpenHelper.COLUMN_IMG, "http://campaignindia-funlab.rhcloud.com/img/camp1" +
-                ".jpeg");
-        value.put(DBOpenHelper.COLUMN_NGO_NAME, "Hope Foundation");
-        getActivity().getContentResolver().insert(DBProvider.URI_CAMPAIGNS,
-                value);
-
-        value = new ContentValues();
-        value.put(DBOpenHelper.COLUMN_ID,
-                110003);
-        value.put(DBOpenHelper.COLUMN_NAME, "Hope");
-        value.put(DBOpenHelper.COLUMN_SHORT_DESC, "We make you see the world with a new hope...");
-        value.put(DBOpenHelper.COLUMN_URL, "http://campaignindia-funlab.rhcloud.com/campaign/c11001");
-        value.put(DBOpenHelper.COLUMN_IMG, "http://campaignindia-funlab.rhcloud.com/img/camp2" +
-                ".jpeg");
-        value.put(DBOpenHelper.COLUMN_NGO_NAME, "Hope Foundation");
-        getActivity().getContentResolver().insert(DBProvider.URI_CAMPAIGNS,
-                value);
-
-        value.put(DBOpenHelper.COLUMN_ID,
-                110002);
-        value.put(DBOpenHelper.COLUMN_NAME, "Khusiyaan");
-        value.put(DBOpenHelper.COLUMN_SHORT_DESC, "We spread happiness");
-        value.put(DBOpenHelper.COLUMN_URL, "http://campaignindia-funlab.rhcloud.com/campaign/c11001");
-        value.put(DBOpenHelper.COLUMN_IMG, "http://campaignindia-funlab.rhcloud.com/img/camp3.jpeg");
-        value.put(DBOpenHelper.COLUMN_NGO_NAME, "Hope Foundation");
-        getActivity().getContentResolver().insert(DBProvider.URI_CAMPAIGNS,
-                value);
-
-        value = new ContentValues();
-        value.put(DBOpenHelper.COLUMN_ID,
-                110004);
-        value.put(DBOpenHelper.COLUMN_NAME, "Umeed");
-        value.put(DBOpenHelper.COLUMN_SHORT_DESC, "Hope in lives of millions of people");
-        value.put(DBOpenHelper.COLUMN_URL, "http://campaignindia-funlab.rhcloud.com/campaign/c11001");
-        value.put(DBOpenHelper.COLUMN_IMG, "http://campaignindia-funlab.rhcloud.com/img/camp4" +
-                ".jpeg");
-        value.put(DBOpenHelper.COLUMN_NGO_NAME, "Hope Foundation");
-        getActivity().getContentResolver().insert(DBProvider.URI_CAMPAIGNS,
-                value);
-
-        value = new ContentValues();
-        value.put(DBOpenHelper.COLUMN_ID,
-                110005);
-        value.put(DBOpenHelper.COLUMN_NAME, "New Horizon");
-        value.put(DBOpenHelper.COLUMN_SHORT_DESC, "Promote awareness among people");
-        value.put(DBOpenHelper.COLUMN_URL, "http://campaignindia-funlab.rhcloud.com/campaign/c11001");
-        value.put(DBOpenHelper.COLUMN_IMG, "http://campaignindia-funlab.rhcloud.com/img/camp5" +
-                ".jpeg");
-        value.put(DBOpenHelper.COLUMN_NGO_NAME, "Hope Foundation");
-        getActivity().getContentResolver().insert(DBProvider.URI_CAMPAIGNS,
-                value);
-
-        value = new ContentValues();
-        value.put(DBOpenHelper.COLUMN_ID,
-                110006);
-        value.put(DBOpenHelper.COLUMN_NAME, "Nanhi si duniya");
-        value.put(DBOpenHelper.COLUMN_SHORT_DESC, "Preserving childhood");
-        value.put(DBOpenHelper.COLUMN_URL, "http://campaignindia-funlab.rhcloud.com/campaign/c11001");
-        value.put(DBOpenHelper.COLUMN_IMG, "http://campaignindia-funlab.rhcloud.com/img/camp6" +
-                ".jpeg");
-        value.put(DBOpenHelper.COLUMN_NGO_NAME, "Hope Foundation");
-        getActivity().getContentResolver().insert(DBProvider.URI_CAMPAIGNS,
-                value);
-
-        value = new ContentValues();
-        value.put(DBOpenHelper.COLUMN_ID,
-                110007);
-        value.put(DBOpenHelper.COLUMN_NAME, "Hosala");
-        value.put(DBOpenHelper.COLUMN_SHORT_DESC, "Lets get rid of habits that take your lives");
-        value.put(DBOpenHelper.COLUMN_URL, "http://campaignindia-funlab.rhcloud.com/campaign/c11001");
-        value.put(DBOpenHelper.COLUMN_IMG, "http://campaignindia-funlab.rhcloud.com/img/camp7" +
-                ".jpeg");
-        value.put(DBOpenHelper.COLUMN_NGO_NAME, "Hope Foundation");
-        getActivity().getContentResolver().insert(DBProvider.URI_CAMPAIGNS,
-                value);
-
-        value = new ContentValues();
-        value.put(DBOpenHelper.COLUMN_ID,
-                110008);
-        value.put(DBOpenHelper.COLUMN_NAME, "Sapne");
-        value.put(DBOpenHelper.COLUMN_SHORT_DESC, "Lets fulfill the dreams in those innocent eyes");
-        value.put(DBOpenHelper.COLUMN_URL, "http://campaignindia-funlab.rhcloud.com/campaign/c11001");
-        value.put(DBOpenHelper.COLUMN_IMG, "http://campaignindia-funlab.rhcloud.com/img/camp8" +
-                ".jpg");
-        value.put(DBOpenHelper.COLUMN_NGO_NAME, "Hope Foundation");
-        getActivity().getContentResolver().insert(DBProvider.URI_CAMPAIGNS,
-                value);
-
-        value = new ContentValues();
-        value.put(DBOpenHelper.COLUMN_ID,
-                110009);
-        value.put(DBOpenHelper.COLUMN_NAME, "Muskaan");
-        value.put(DBOpenHelper.COLUMN_SHORT_DESC, "Together we can make others smile");
-        value.put(DBOpenHelper.COLUMN_URL, "http://campaignindia-funlab.rhcloud.com/campaign/c11001");
-        value.put(DBOpenHelper.COLUMN_IMG, "http://campaignindia-funlab.rhcloud.com/img/camp9" +
-                ".jpg");
-        value.put(DBOpenHelper.COLUMN_NGO_NAME, "Hope Foundation");
-        getActivity().getContentResolver().insert(DBProvider.URI_CAMPAIGNS,
-                value);
-
-        value = new ContentValues();
-        value.put(DBOpenHelper.COLUMN_ID,
-                110010);
-        value.put(DBOpenHelper.COLUMN_NAME, "Roshni");
-        value.put(DBOpenHelper.COLUMN_SHORT_DESC, "Awareness is growing.");
-        value.put(DBOpenHelper.COLUMN_URL, "http://campaignindia-funlab.rhcloud.com/campaign/c11001");
-        value.put(DBOpenHelper.COLUMN_IMG, "http://campaignindia-funlab.rhcloud.com/img/camp10" +
-                ".jpg");
-        value.put(DBOpenHelper.COLUMN_NGO_NAME, "Hope Foundation");
-        getActivity().getContentResolver().insert(DBProvider.URI_CAMPAIGNS,
-                value);
-
-        value = new ContentValues();
-        value.put(DBOpenHelper.COLUMN_ID,
-                110011);
-        value.put(DBOpenHelper.COLUMN_NAME, "Khushi");
-        value.put(DBOpenHelper.COLUMN_SHORT_DESC, "One girl with courage is a revolution");
-        value.put(DBOpenHelper.COLUMN_URL, "http://campaignindia-funlab.rhcloud.com/campaign/c11001");
-        value.put(DBOpenHelper.COLUMN_IMG, "http://campaignindia-funlab.rhcloud.com/img/camp11" +
-                ".jpeg");
-        value.put(DBOpenHelper.COLUMN_NGO_NAME, "Hope Foundation");
-        getActivity().getContentResolver().insert(DBProvider.URI_CAMPAIGNS,
-                value);
-
-        value = new ContentValues();
-        value.put(DBOpenHelper.COLUMN_ID,
-                110012);
-        value.put(DBOpenHelper.COLUMN_NAME, "Health is Wealth");
-        value.put(DBOpenHelper.COLUMN_SHORT_DESC, "Spreading awareness among people about HIV");
-        value.put(DBOpenHelper.COLUMN_URL, "http://campaignindia-funlab.rhcloud.com/campaign/c11001");
-        value.put(DBOpenHelper.COLUMN_IMG, "http://campaignindia-funlab.rhcloud.com/img/camp12" +
-                ".png");
-        value.put(DBOpenHelper.COLUMN_NGO_NAME, "Hope Foundation");
-        getActivity().getContentResolver().insert(DBProvider.URI_CAMPAIGNS,
-                value);
-
-    }
-
     @Override
     public void OnError(Constants.VolleyTags tag, VolleyError error) {
 
@@ -337,7 +190,7 @@ public class FeaturedFragment extends BaseFragment implements OnVolleyResponseLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        startActivity(new Intent(getActivity(), CampaignDetailTestActivity.class).putExtra(Constants
+        startActivity(new Intent(getActivity(), CampaignDetailActivity.class).putExtra(Constants
                 .ParamsKeys._ID.key, mCampaigns.get(position).getId()).putExtra(Constants
                 .ParamsKeys.NAME.key, mCampaigns.get(position).getName()).putExtra(Constants
                 .ParamsKeys.IMG.key, mCampaigns.get(position).getImg()));

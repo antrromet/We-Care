@@ -32,11 +32,11 @@
             android:background="@color/translucent"
             android:ellipsize="end"
             android:gravity="center"
-            android:maxLines="2"
             android:padding="5dp"
-            android:singleLine="false"
+            android:singleLine="true"
             android:textColor="@color/primary_text"
-            android:textSize="17sp"/>
+            android:textSize="17sp"
+            android:textStyle="bold"/>
     </RelativeLayout>
 
 
@@ -46,8 +46,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:ellipsize="end"
-        android:maxLines="3"
         android:lines="3"
+        android:maxLines="3"
         android:singleLine="false"
         android:textColor="@color/primary_text"
         android:textSize="15sp"/>

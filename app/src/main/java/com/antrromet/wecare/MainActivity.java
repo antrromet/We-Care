@@ -20,12 +20,41 @@ public class MainActivity extends AppCompatActivity {
 
         // Get the ViewPager and set it's PagerAdapter so that it can display items
         ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
-        viewPager.setAdapter(new MainActivityPagerAdapter(getSupportFragmentManager(),
-                MainActivity.this));
+        viewPager.setAdapter(new MainActivityPagerAdapter(getSupportFragmentManager()));
 
         // Give the TabLayout the ViewPager
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
+        final TabLayout tabLayout = (TabLayout) findViewById(R.id.sliding_tabs);
         tabLayout.setupWithViewPager(viewPager);
+
+        // Hack for flickering titles of the tab layout
+        // https://code.google.com/p/android/issues/detail?id=180454
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout) {
+            int mScrollState;
+            int mScrollPosition;
+            float mScrollOffset;
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                super.onPageScrollStateChanged(state);
+                mScrollState = state;
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset,
+                                       int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                mScrollPosition = position;
+                mScrollOffset = positionOffset;
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                if (mScrollState != ViewPager.SCROLL_STATE_IDLE) {
+                    tabLayout.setScrollPosition(mScrollPosition, mScrollOffset, true);
+                }
+            }
+        });
     }
 
 }

@@ -2,40 +2,30 @@ package com.antrromet.wecare;
 
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.res.ColorStateList;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.graphics.Point;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Display;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.android.volley.Request;
 import com.android.volley.VolleyError;
-import com.antrromet.wecare.adapters.ActivitiesAdapter;
+import com.antrromet.wecare.adapters.CampaignDetailsAdapter;
 import com.antrromet.wecare.interfaces.OnVolleyResponseListener;
 import com.antrromet.wecare.models.Activity;
 import com.antrromet.wecare.models.CampaignDetail;
@@ -46,31 +36,25 @@ import com.antrromet.wecare.utils.JSONUtils;
 import com.antrromet.wecare.utils.Logger;
 import com.antrromet.wecare.widgets.MyLinearLayoutManager;
 import com.nostra13.universalimageloader.core.ImageLoader;
-import com.nostra13.universalimageloader.core.assist.FailReason;
-import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 public class CampaignDetailActivity extends BaseActivity implements LoaderManager
-        .LoaderCallbacks<Cursor>, OnVolleyResponseListener, OnClickListener {
+        .LoaderCallbacks<Cursor>, OnVolleyResponseListener, OnClickListener, CampaignDetailsAdapter.OnWebLinkClickListener {
 
     private String mCampaignId;
     private CampaignDetail mCampaign;
     private ImageLoader mImageLoader;
-    private CollapsingToolbarLayout mCollapsingToolbar;
+    private CampaignDetailsAdapter mCampaignDetailsAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_test_detail);
+        setContentView(R.layout.activity_campaign_detail);
 
         mCampaignId = getIntent().getStringExtra(Constants.ParamsKeys._ID.key);
         // Precaution : Just in case the id is null
@@ -89,10 +73,11 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-        mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
+
+        CollapsingToolbarLayout mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         mCollapsingToolbar.setTitle(getIntent().getStringExtra(Constants.ParamsKeys.NAME.key));
-//        mCollapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color
-//                .transparent));
+        mCollapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color
+                .transparent));
 
         // Load the local cached data
         getSupportLoaderManager().restartLoader(Constants.Loaders.CAMPAIGN_DETAILS.id,
@@ -101,6 +86,17 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
         // Request for the latest campaign details
         setVolleyListener(this);
         requestCampaignDetail();
+
+        mCampaignDetailsAdapter = new CampaignDetailsAdapter(this);
+        mCampaignDetailsAdapter.setOnWebLinkClickListener(this);
+        RecyclerView campaignRecyclerView = (RecyclerView) findViewById(R.id
+                .campaign_detail_recycler_view);
+        campaignRecyclerView.setHasFixedSize(true);
+        MyLinearLayoutManager mLayoutManager = new MyLinearLayoutManager(this,
+                LinearLayoutManager.VERTICAL, false);
+        campaignRecyclerView.setLayoutManager(mLayoutManager);
+        campaignRecyclerView.setItemAnimator(new DefaultItemAnimator());
+        campaignRecyclerView.setAdapter(mCampaignDetailsAdapter);
     }
 
     private void setAppBarLayoutHeight() {
@@ -222,85 +218,8 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
      */
     private void setDataToViews() {
         mImageLoader.displayImage(mCampaign.getImg(), (ImageView) findViewById(R.id
-                .poster_image), new ImageLoadingListener() {
-            @Override
-            public void onLoadingStarted(String imageUri, View view) {
-
-            }
-
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-            }
-
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                Palette.from(loadedImage).generate(new Palette.PaletteAsyncListener() {
-                    @Override
-                    public void onGenerated(Palette palette) {
-                        mCollapsingToolbar.setContentScrimColor(palette.getMutedColor(ContextCompat.getColor
-                                (CampaignDetailActivity.this, R.color.primary)));
-                        mCollapsingToolbar.setStatusBarScrimColor(palette.getDarkVibrantColor(ContextCompat
-                                .getColor(CampaignDetailActivity.this, R.color.dark_primary)));
-                        ((FloatingActionButton) findViewById(R.id.fab)).setRippleColor(palette
-                                .getLightVibrantColor((ContextCompat.getColor
-                                        (CampaignDetailActivity.this, R.color.light_accent))));
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            findViewById(R.id.fab).setBackgroundTintList
-                                    (ColorStateList.valueOf(palette.getVibrantColor(
-                                            (ContextCompat.getColor(CampaignDetailActivity.this, R.color
-                                                    .accent)))));
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onLoadingCancelled(String imageUri, View view) {
-
-            }
-        });
-        ((TextView) findViewById(R.id.about_text)).setText(mCampaign.getAbout());
-
-        if (mCampaign.getActivities() == null || mCampaign.getActivities().isEmpty()) {
-            findViewById(R.id.activities_recyclerview).setVisibility(View.GONE);
-            findViewById(R.id.activities_divider).setVisibility(View.GONE);
-            findViewById(R.id.activities_title).setVisibility(View.GONE);
-        } else {
-            ActivitiesAdapter activityAdapter = new ActivitiesAdapter();
-            activityAdapter.setData(mCampaign.getActivities());
-            RecyclerView activitiesRecyclerView = (RecyclerView) findViewById(R.id.activities_recyclerview);
-            activitiesRecyclerView.setHasFixedSize(true);
-            MyLinearLayoutManager mLayoutManager = new MyLinearLayoutManager(this,
-                    LinearLayoutManager.HORIZONTAL, false);
-            activitiesRecyclerView.setLayoutManager(mLayoutManager);
-            activitiesRecyclerView.setItemAnimator(new DefaultItemAnimator());
-            activitiesRecyclerView.setAdapter(activityAdapter);
-            findViewById(R.id.activities_recyclerview).setVisibility(View.VISIBLE);
-            findViewById(R.id.activities_divider).setVisibility(View.VISIBLE);
-            findViewById(R.id.activities_title).setVisibility(View.VISIBLE);
-        }
-
-        ((TextView) findViewById(R.id.progress_text)).setText(getString(R.string
-                .progress, mCampaign.getProgress()));
-        ((ProgressBar) findViewById(R.id.progress)).setProgress(mCampaign.getProgress());
-
-        try {
-            SimpleDateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale
-                    .getDefault());
-
-            Date startDate = dateFormatter.parse(mCampaign.getStartsOn());
-            Date endDate = dateFormatter.parse(mCampaign.getEndsOn());
-
-            dateFormatter = new SimpleDateFormat("MMM dd, hh:mm a", Locale
-                    .getDefault());
-            ((TextView) findViewById(R.id.duration_text)).setText(dateFormatter.format(startDate)
-                    + " - " + dateFormatter.format(endDate));
-            findViewById(R.id.duration_text).setVisibility(View.VISIBLE);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            findViewById(R.id.duration_text).setVisibility(View.GONE);
-        }
+                .poster_image));
+        mCampaignDetailsAdapter.setData(mCampaign);
         findViewById(R.id.fab).setOnClickListener(this);
     }
 
@@ -462,21 +381,10 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
-        } else if (item.getItemId() == R.id.website) {
-            launchWebViewActivity(mCampaign.getContact().getWebsite());
-            return true;
-        } else if (item.getItemId() == R.id.mail) {
-            launchEmailClient(mCampaign.getContact().getEmail());
-            return true;
-        } else if (item.getItemId() == R.id.facebook) {
-            launchWebPage(mCampaign.getContact().getFbLink());
-            return true;
-        } else if (item.getItemId() == R.id.twitter) {
-            launchWebPage(mCampaign.getContact().getTwitterLink());
-            return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     @Override
     public void onClick(View v) {
@@ -503,34 +411,8 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
                 url).putExtra(Constants.ParamsKeys.TITLE.key, mCampaign.getName()));
     }
 
-    /**
-     * Launch the email client
-     *
-     * @param mailTo the address to whom the mail is to be sent
-     */
-    private void launchEmailClient(String mailTo) {
-        Intent emailIntent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
-                "mailto", mailTo, null));
-        startActivity(Intent.createChooser(emailIntent, "Send Email using"));
-    }
-
-    /**
-     * Launch the webpage, doing so in case of Facebook and Twitter. Because if the apps are
-     * installed then the page can be opened in the app itself
-     *
-     * @param url url of the page
-     */
-    private void launchWebPage(String url) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(url));
-        startActivity(intent);
-    }
-
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.contacts, menu);
-        return true;
+    public void onWebLinkClick(View view, String link) {
+        launchWebViewActivity(link);
     }
-
 }

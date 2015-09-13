@@ -3,24 +3,24 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:orientation="vertical"
-              android:paddingLeft="10dp"
-              android:paddingRight="10dp"
-              android:paddingBottom="15dp"
-              android:paddingTop="15dp">
+              android:paddingLeft="15dp"
+              android:paddingRight="15dp"
+              android:paddingTop="25dp">
 
     <TextView
         android:id="@+id/title_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="10dp"
         android:text="@string/activities"
-        android:textColor="@color/secondary_text"
-        android:textSize="18sp"/>
+        android:textColor="@android:color/black"
+        android:textSize="22sp"
+        android:textStyle="bold"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/activities_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:clipToPadding="false"
         android:overScrollMode="never"/>
 

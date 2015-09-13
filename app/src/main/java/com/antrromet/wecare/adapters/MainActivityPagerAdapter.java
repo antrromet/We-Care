@@ -1,23 +1,20 @@
 package com.antrromet.wecare.adapters;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.util.SparseArray;
 
 import com.antrromet.wecare.fragments.BaseFragment;
-import com.antrromet.wecare.fragments.FeaturedFragment;
+import com.antrromet.wecare.fragments.CampaignsFragment;
 
 public class MainActivityPagerAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 2;
     private String tabTitles[] = new String[]{"Campaigns", "NGOs"};
-    private Context context;
     private SparseArray<BaseFragment> fragments;
 
-    public MainActivityPagerAdapter(FragmentManager fm, Context context) {
+    public MainActivityPagerAdapter(FragmentManager fm) {
         super(fm);
-        this.context = context;
         fragments = new SparseArray<>(PAGE_COUNT);
     }
 
@@ -33,7 +30,7 @@ public class MainActivityPagerAdapter extends FragmentPagerAdapter {
         if (fragment == null) {
             switch (position) {
                 case 0: {
-                    fragment = new FeaturedFragment();
+                    fragment = new CampaignsFragment();
                     fragments.put(0, fragment);
                     break;
                 }
