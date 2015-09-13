@@ -25,6 +25,8 @@
 
         <activity
             android:name=".CampaignDetailActivity"/>
+        <activity
+            android:name=".CampaignDetailTestActivity"/>
 
         <activity
             android:name=".WebViewActivity"/>

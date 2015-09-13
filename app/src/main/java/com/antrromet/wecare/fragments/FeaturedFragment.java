@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.android.volley.VolleyError;
-import com.antrromet.wecare.CampaignDetailActivity;
+import com.antrromet.wecare.CampaignDetailTestActivity;
 import com.antrromet.wecare.Constants;
 import com.antrromet.wecare.R;
 import com.antrromet.wecare.adapters.CampaignAdapter;
@@ -337,7 +337,7 @@ public class FeaturedFragment extends BaseFragment implements OnVolleyResponseLi
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        startActivity(new Intent(getActivity(), CampaignDetailActivity.class).putExtra(Constants
+        startActivity(new Intent(getActivity(), CampaignDetailTestActivity.class).putExtra(Constants
                 .ParamsKeys._ID.key, mCampaigns.get(position).getId()).putExtra(Constants
                 .ParamsKeys.NAME.key, mCampaigns.get(position).getName()).putExtra(Constants
                 .ParamsKeys.IMG.key, mCampaigns.get(position).getImg()));

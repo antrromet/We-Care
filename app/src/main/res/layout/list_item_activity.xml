@@ -49,7 +49,7 @@
         android:maxLines="3"
         android:lines="3"
         android:singleLine="false"
-        android:textColor="@color/secondary_text"
+        android:textColor="@color/primary_text"
         android:textSize="15sp"/>
 
 </LinearLayout>
