@@ -7,6 +7,7 @@ import android.util.SparseArray;
 
 import com.antrromet.wecare.fragments.BaseFragment;
 import com.antrromet.wecare.fragments.CampaignsFragment;
+import com.antrromet.wecare.fragments.NgosFragment;
 
 public class MainActivityPagerAdapter extends FragmentPagerAdapter {
     final int PAGE_COUNT = 2;
@@ -36,7 +37,7 @@ public class MainActivityPagerAdapter extends FragmentPagerAdapter {
                 }
 
                 case 1: {
-                    fragment = PageFragment.newInstance(position);
+                    fragment = new NgosFragment();
                     fragments.put(1, fragment);
                     break;
                 }

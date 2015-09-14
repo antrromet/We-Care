@@ -11,7 +11,8 @@ public class Constants {
      */
     public enum VolleyTags {
 
-        GET_ALL_CAMPAIGNS("get_all_campaigns"), GET_CAMPAIGN_DETAILS("get_campaign_details");
+        GET_ALL_CAMPAIGNS("get_all_campaigns"), GET_CAMPAIGN_DETAILS("get_campaign_details"),
+        GET_ALL_NGOS("get_all_ngos"), GET_NGO_DETAILS("get_ngo_details");
 
         public final String tag;
 
@@ -26,28 +27,14 @@ public class Constants {
     public enum Urls {
 
         GET_ALL_CAMPAIGNS(BASE_URL + "/get/campaigns"), GET_CAMPAIGN_DETAILS(BASE_URL +
-                "/get/campaign/%s");
+                "/get/campaign/%s"), GET_ALL_NGOS(BASE_URL + "/get/ngo"),
+        GET_NGO_DETAILS(BASE_URL + "/get/ngo/%s");
 
         public final String link;
 
         Urls(String link) {
             this.link = link;
         }
-    }
-
-    /**
-     * Enum for holding the shared preference keys
-     */
-    public enum SharedPreferenceKeys {
-
-        NINE_GAG_NEXT_PAGE_ID("nine_gag_next_page_id");
-
-        public final String key;
-
-        SharedPreferenceKeys(final String key) {
-            this.key = key;
-        }
-
     }
 
     /**
@@ -61,7 +48,7 @@ public class Constants {
         MISSION("mission"), ABOUT("about"), ACTIVITIES("activities"), DESC("desc"), TITLE
                 ("title"), CONTACT("contact"), WEBSITE("website"), EMAIL("email"), FB_LINK
                 ("fb_link"), TW_LINK("tw_link"), METADATA("metadata"), STARTS_ON("startsOn"),
-        ENDS_ON("endsOn"), PROGRESS("progress"), SUB_TITLE("subTitle");
+        ENDS_ON("endsOn"), PROGRESS("progress"), SUB_TITLE("subTitle"), CAMPAIGNS("campaigns");
 
         public final String key;
 
@@ -77,7 +64,8 @@ public class Constants {
      */
     public enum Loaders {
 
-        CAMPAIGNS(100), CAMPAIGN_DETAILS(101), ACTIVITIES(102), CONTACTS(103);
+        CAMPAIGNS(100), CAMPAIGN_DETAILS(101), ACTIVITIES(102), CONTACTS(103),
+        NGOS(104), NGO_DETAILS(105);
 
         public final int id;
 
@@ -85,6 +73,21 @@ public class Constants {
 
             this.id = id;
         }
+    }
+
+    /**
+     * Enum for holding the shared preference keys
+     */
+    public enum SharedPreferenceKeys {
+
+        TEST("test");
+
+        public final String key;
+
+        SharedPreferenceKeys(final String key) {
+            this.key = key;
+        }
+
     }
 
 }

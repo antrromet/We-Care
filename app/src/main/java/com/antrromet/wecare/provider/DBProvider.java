@@ -23,15 +23,18 @@ public class DBProvider extends ContentProvider {
             .CAMPAIGNS_TABLE_NAME);
     public static final Uri URI_CAMPAIGN_DETAILS = Uri.parse(URI_PREFIX + DBOpenHelper
             .CAMPAIGN_DETAILS_TABLE_NAME);
-    public static final Uri URI_ACTIVITES = Uri.parse(URI_PREFIX + DBOpenHelper
+    public static final Uri URI_ACTIVITIES = Uri.parse(URI_PREFIX + DBOpenHelper
             .ACTIVITIES_TABLE_NAME);
     public static final Uri URI_CONTACTS = Uri.parse(URI_PREFIX + DBOpenHelper
             .CONTACTS_TABLE_NAME);
+    public static final Uri URI_NGOS = Uri.parse(URI_PREFIX + DBOpenHelper
+            .NGOS_TABLE_NAME);
 
     private static final int CONTENT_CAMPAIGNS = 101;
     private static final int CONTENT_CAMPAIGN_DETAILS = 102;
     private static final int CONTENT_ACTIVITIES = 103;
     private static final int CONTENT_CONTACTS = 104;
+    private static final int CONTENT_NGOS = 105;
 
     static {
         URI_MATCHER.addURI(AUTHORITY, DBOpenHelper.CAMPAIGNS_TABLE_NAME,
@@ -42,6 +45,8 @@ public class DBProvider extends ContentProvider {
                 CONTENT_ACTIVITIES);
         URI_MATCHER.addURI(AUTHORITY, DBOpenHelper.CONTACTS_TABLE_NAME,
                 CONTENT_CONTACTS);
+        URI_MATCHER.addURI(AUTHORITY, DBOpenHelper.NGOS_TABLE_NAME,
+                CONTENT_NGOS);
     }
 
     private DBOpenHelper dbHelper;
@@ -62,6 +67,8 @@ public class DBProvider extends ContentProvider {
             return DBOpenHelper.ACTIVITIES_TABLE_NAME;
         } else if (contentType == CONTENT_CONTACTS) {
             return DBOpenHelper.CONTACTS_TABLE_NAME;
+        }else if (contentType == CONTENT_NGOS) {
+            return DBOpenHelper.NGOS_TABLE_NAME;
         }
         return null;
     }

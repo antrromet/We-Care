@@ -15,6 +15,7 @@ import android.provider.BaseColumns;
 public class DBOpenHelper extends SQLiteOpenHelper {
 
     public static final String CAMPAIGNS_TABLE_NAME = "campaigns";
+    public static final String NGOS_TABLE_NAME = "ngos";
     public static final String CAMPAIGN_DETAILS_TABLE_NAME = "campaign_details";
     public static final String ACTIVITIES_TABLE_NAME = "activities";
     public static final String CONTACTS_TABLE_NAME = "contacts";
@@ -40,6 +41,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     public static final String COLUMN_TWITTER_LINK = "twitter_link";
     public static final String COLUMN_DESC = "desc";
     public static final String COLUMN_TITLE = "title";
+    public static final String COLUMN_CAMPAIGN_COUNT = "campaign_count";
 
     private static final String TEXT = " text, ";
     private static final String INTEGER = " integer, ";
@@ -80,6 +82,14 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     private static final String CONTACTS_TABLE_DESTROYER = "drop table " + DBProvider
             .DB_NAME + "." + ACTIVITIES_TABLE_NAME + ";";
 
+    private static final String NGOS_TABLE_BUILDER = "create table " + NGOS_TABLE_NAME +
+            "(" + BaseColumns._ID + " integer primary key, " + COLUMN_ID + TEXT +
+            COLUMN_IMG + TEXT + COLUMN_MISSION + TEXT + COLUMN_NAME + TEXT + COLUMN_SHORT_DESC +
+            TEXT + COLUMN_CAMPAIGN_COUNT + INTEGER + "unique" +
+            "(" + COLUMN_ID + ") on conflict " + "replace);";
+    private static final String NGOS_TABLE_DESTROYER = "drop table " + DBProvider.DB_NAME +
+            "." + NGOS_TABLE_NAME + ";";
+
 
     public DBOpenHelper(final Context context, final String name,
                         final CursorFactory factory, final int version) {
@@ -92,6 +102,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         db.execSQL(CAMPAIGN_DETAILS_TABLE_BUILDER);
         db.execSQL(ACTIVITIES_TABLE_BUILDER);
         db.execSQL(CONTACTS_TABLE_BUILDER);
+        db.execSQL(NGOS_TABLE_BUILDER);
     }
 
     @Override
@@ -100,6 +111,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         db.execSQL(CAMPAIGN_DETAILS_TABLE_DESTROYER);
         db.execSQL(ACTIVITIES_TABLE_DESTROYER);
         db.execSQL(CONTACTS_TABLE_DESTROYER);
+        db.execSQL(NGOS_TABLE_DESTROYER);
         onCreate(db);
     }
 

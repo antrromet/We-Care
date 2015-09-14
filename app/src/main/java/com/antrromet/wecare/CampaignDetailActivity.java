@@ -123,7 +123,7 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
             return new CursorLoader(this, DBProvider.URI_CAMPAIGN_DETAILS,
                     null, DBOpenHelper.COLUMN_ID + " = ?", new String[]{mCampaignId}, null);
         } else if (id == Constants.Loaders.ACTIVITIES.id) {
-            return new CursorLoader(this, DBProvider.URI_ACTIVITES,
+            return new CursorLoader(this, DBProvider.URI_ACTIVITIES,
                     null, DBOpenHelper.COLUMN_CAMPAIGN_ID + " = ?", new String[]{mCampaignId},
                     null);
         } else if (id == Constants.Loaders.CONTACTS.id) {
@@ -257,7 +257,7 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
                             (activityJsonObject, Constants.ParamsKeys.TITLE.key));
                     setActivityValues(activity, activityValues);
                     mCampaignActivities.add(activity);
-                    getContentResolver().insert(DBProvider.URI_ACTIVITES, activityValues);
+                    getContentResolver().insert(DBProvider.URI_ACTIVITIES, activityValues);
                 }
             }
             mCampaign.setActivities(mCampaignActivities);

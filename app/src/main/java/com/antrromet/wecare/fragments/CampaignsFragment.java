@@ -28,6 +28,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Antrromet on 9/1/15 9:02 PM
@@ -35,7 +36,7 @@ import java.util.ArrayList;
 public class CampaignsFragment extends BaseFragment implements OnVolleyResponseListener,
         LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
 
-    private ArrayList<Campaign> mCampaigns;
+    private List<Campaign> mCampaigns;
     private CampaignAdapter mCampaignAdapter;
 
     @Override
