@@ -153,6 +153,7 @@ public class NgoDetailActivity extends BaseActivity implements LoaderManager
                         .COLUMN_SHORT_DESC)));
                 mNgo.setJoined(data.getString(data.getColumnIndex(DBOpenHelper.COLUMN_JOINED)));
                 mNgo.setFounder(data.getString(data.getColumnIndex(DBOpenHelper.COLUMN_FOUNDER)));
+                mNgo.setUrl(data.getString(data.getColumnIndex(DBOpenHelper.COLUMN_URL)));
                 Logger.d(TAG, "Loaded ngo object");
             }
         } else if (loader.getId() == Constants.Loaders.CAMPAIGNS.id) {
@@ -304,6 +305,8 @@ public class NgoDetailActivity extends BaseActivity implements LoaderManager
         }
         values.put(DBOpenHelper.COLUMN_MISSION, JSONUtils.optString(responseObject, Constants
                 .ParamsKeys.MISSION.key));
+        values.put(DBOpenHelper.COLUMN_URL, JSONUtils.optString(responseObject, Constants
+                .ParamsKeys.URL.key));
         getContentResolver().insert(DBProvider.URI_NGO_DETAILS, values);
         setNgoDetailsValues(values);
     }
@@ -322,6 +325,7 @@ public class NgoDetailActivity extends BaseActivity implements LoaderManager
         mNgo.setMission(values.getAsString(DBOpenHelper.COLUMN_MISSION));
         mNgo.setName(values.getAsString(DBOpenHelper.COLUMN_NAME));
         mNgo.setShortDesc(values.getAsString(DBOpenHelper.COLUMN_DESC));
+        mNgo.setUrl(values.getAsString(DBOpenHelper.COLUMN_URL));
     }
 
     /**
@@ -383,11 +387,11 @@ public class NgoDetailActivity extends BaseActivity implements LoaderManager
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.fab) {
-            shareCampaign();
+            shareNgo();
         }
     }
 
-    private void shareCampaign() {
+    private void shareNgo() {
         Intent sendIntent = new Intent();
         sendIntent.setAction(Intent.ACTION_SEND);
         sendIntent.putExtra(Intent.EXTRA_TEXT, mNgo.getUrl());
