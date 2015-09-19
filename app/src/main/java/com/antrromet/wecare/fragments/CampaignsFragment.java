@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,10 +35,11 @@ import java.util.List;
  * Created by Antrromet on 9/1/15 9:02 PM
  */
 public class CampaignsFragment extends BaseFragment implements OnVolleyResponseListener,
-        LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
+        LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private List<Campaign> mCampaigns;
     private CampaignAdapter mCampaignAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,6 +61,12 @@ public class CampaignsFragment extends BaseFragment implements OnVolleyResponseL
         mCampaignAdapter = new CampaignAdapter(getActivity());
         mCampaignGridView.setAdapter(mCampaignAdapter);
         mCampaignGridView.setOnItemClickListener(this);
+
+        // Setting up the Refresh Layout
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accent,
+                R.color.primary, R.color.accent);
         return view;
     }
 
@@ -75,6 +83,7 @@ public class CampaignsFragment extends BaseFragment implements OnVolleyResponseL
         // Check necessary because the response might come after the app is destroyed and the
         // activity would be null in that case
         if (getActivity() != null) {
+            mSwipeRefreshLayout.setRefreshing(false);
             insertCampaignsInDB((JSONArray) responseObject);
             mCampaignAdapter.setCampaigns(mCampaigns);
         }
@@ -197,5 +206,10 @@ public class CampaignsFragment extends BaseFragment implements OnVolleyResponseL
                 .ParamsKeys._ID.key, mCampaigns.get(position).getId()).putExtra(Constants
                 .ParamsKeys.NAME.key, mCampaigns.get(position).getName()).putExtra(Constants
                 .ParamsKeys.IMG.key, mCampaigns.get(position).getImg()));
+    }
+
+    @Override
+    public void onRefresh() {
+        requestCampaigns();
     }
 }

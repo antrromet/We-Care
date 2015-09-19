@@ -12,6 +12,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -44,12 +45,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CampaignDetailActivity extends BaseActivity implements LoaderManager
-        .LoaderCallbacks<Cursor>, OnVolleyResponseListener, OnClickListener, CampaignDetailsAdapter.OnWebLinkClickListener {
+        .LoaderCallbacks<Cursor>, OnVolleyResponseListener, OnClickListener, CampaignDetailsAdapter.OnWebLinkClickListener, SwipeRefreshLayout.OnRefreshListener{
 
     private String mCampaignId;
     private CampaignDetail mCampaign;
     private ImageLoader mImageLoader;
     private CampaignDetailsAdapter mCampaignDetailsAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,16 +99,22 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
         campaignRecyclerView.setLayoutManager(mLayoutManager);
         campaignRecyclerView.setItemAnimator(new DefaultItemAnimator());
         campaignRecyclerView.setAdapter(mCampaignDetailsAdapter);
+
+        // Setting up the Refresh Layout
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accent,
+                R.color.primary, R.color.accent);
     }
 
     private void setAppBarLayoutHeight() {
-        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
+        AppBarLayout mAppBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mAppBarLayout.getLayoutParams();
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         params.height = size.x;
-        appBarLayout.setLayoutParams(params);
+        mAppBarLayout.setLayoutParams(params);
     }
 
     /**
@@ -209,6 +217,7 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
 
     @Override
     public void OnSuccess(Constants.VolleyTags tag, Object responseObject) {
+        mSwipeRefreshLayout.setRefreshing(false);
         insertCampaignDetailsInDB((JSONObject) responseObject);
         setDataToViews();
     }
@@ -414,5 +423,10 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
     @Override
     public void onWebLinkClick(View view, String link) {
         launchWebViewActivity(link);
+    }
+
+    @Override
+    public void onRefresh() {
+        requestCampaignDetail();
     }
 }

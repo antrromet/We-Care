@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,10 +39,11 @@ import java.util.List;
  * Created by Antrromet on 9/1/15 9:02 PM
  */
 public class NgosFragment extends BaseFragment implements OnVolleyResponseListener,
-        LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
+        LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private List<Ngo> mNgos;
     private NgoAdapter mNgoAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,6 +65,12 @@ public class NgosFragment extends BaseFragment implements OnVolleyResponseListen
         mNgoAdapter = new NgoAdapter(getActivity());
         mNgosGridView.setAdapter(mNgoAdapter);
         mNgosGridView.setOnItemClickListener(this);
+
+        // Setting up the Refresh Layout
+        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accent,
+                R.color.primary, R.color.accent);
         return view;
     }
 
@@ -79,6 +87,7 @@ public class NgosFragment extends BaseFragment implements OnVolleyResponseListen
         // Check necessary because the response might come after the app is destroyed and the
         // activity would be null in that case
         if (getActivity() != null) {
+            mSwipeRefreshLayout.setRefreshing(false);
             insertNgosInDB((JSONArray) responseObject);
             mNgoAdapter.setNgos(mNgos);
         }
@@ -186,5 +195,10 @@ public class NgosFragment extends BaseFragment implements OnVolleyResponseListen
                 .ParamsKeys._ID.key, mNgos.get(position).getId()).putExtra(Constants
                 .ParamsKeys.NAME.key, mNgos.get(position).getName()).putExtra(Constants
                 .ParamsKeys.IMG.key, mNgos.get(position).getImg()));
+    }
+
+    @Override
+    public void onRefresh() {
+        requestNGOs();
     }
 }
