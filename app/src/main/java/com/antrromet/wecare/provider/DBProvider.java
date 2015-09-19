@@ -29,12 +29,15 @@ public class DBProvider extends ContentProvider {
             .CONTACTS_TABLE_NAME);
     public static final Uri URI_NGOS = Uri.parse(URI_PREFIX + DBOpenHelper
             .NGOS_TABLE_NAME);
+    public static final Uri URI_NGO_DETAILS = Uri.parse(URI_PREFIX + DBOpenHelper
+            .NGO_DETAILS_TABLE_NAME);
 
     private static final int CONTENT_CAMPAIGNS = 101;
     private static final int CONTENT_CAMPAIGN_DETAILS = 102;
     private static final int CONTENT_ACTIVITIES = 103;
     private static final int CONTENT_CONTACTS = 104;
     private static final int CONTENT_NGOS = 105;
+    private static final int CONTENT_NGO_DETAILS = 106;
 
     static {
         URI_MATCHER.addURI(AUTHORITY, DBOpenHelper.CAMPAIGNS_TABLE_NAME,
@@ -47,6 +50,8 @@ public class DBProvider extends ContentProvider {
                 CONTENT_CONTACTS);
         URI_MATCHER.addURI(AUTHORITY, DBOpenHelper.NGOS_TABLE_NAME,
                 CONTENT_NGOS);
+        URI_MATCHER.addURI(AUTHORITY, DBOpenHelper.NGO_DETAILS_TABLE_NAME,
+                CONTENT_NGO_DETAILS);
     }
 
     private DBOpenHelper dbHelper;
@@ -69,6 +74,8 @@ public class DBProvider extends ContentProvider {
             return DBOpenHelper.CONTACTS_TABLE_NAME;
         }else if (contentType == CONTENT_NGOS) {
             return DBOpenHelper.NGOS_TABLE_NAME;
+        }else if (contentType == CONTENT_NGO_DETAILS) {
+            return DBOpenHelper.NGO_DETAILS_TABLE_NAME;
         }
         return null;
     }

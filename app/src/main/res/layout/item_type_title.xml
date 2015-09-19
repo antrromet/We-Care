@@ -8,6 +8,15 @@
               android:paddingTop="25dp">
 
     <TextView
+        android:id="@+id/founder_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginBottom="5dp"
+        android:textColor="@color/light_grey"
+        android:textSize="18sp"/>
+
+    <TextView
         android:id="@+id/duration_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,6 +31,16 @@
         android:textColor="@android:color/black"
         android:textSize="35sp"
         android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/mission_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:lineSpacingMultiplier="1.25"
+        android:visibility="gone"
+        android:textColor="@color/primary_text"
+        android:textSize="20sp"/>
 
     <TextView
         android:id="@+id/about_text"

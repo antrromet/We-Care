@@ -171,7 +171,9 @@ public class CampaignsFragment extends BaseFragment implements OnVolleyResponseL
                         campaign.setNgoId(data.getString(data.getColumnIndex(DBOpenHelper
                                 .COLUMN_NGO_ID)));
                         campaign.setNgoName(data.getString(data.getColumnIndex(DBOpenHelper
-                                .COLUMN_NAME)));
+                                .COLUMN_NGO_NAME)));
+                        campaign.setNgoShortDesc(data.getString(data.getColumnIndex(DBOpenHelper
+                                .COLUMN_NGO_SHORT_DESC)));
                         campaign.setShortDesc(data.getString(data.getColumnIndex(DBOpenHelper
                                 .COLUMN_SHORT_DESC)));
                         campaign.setUrl(data.getString(data.getColumnIndex(DBOpenHelper

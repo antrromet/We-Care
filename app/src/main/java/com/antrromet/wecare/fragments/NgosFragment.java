@@ -17,8 +17,8 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import com.android.volley.VolleyError;
-import com.antrromet.wecare.CampaignDetailActivity;
 import com.antrromet.wecare.Constants;
+import com.antrromet.wecare.NgoDetailActivity;
 import com.antrromet.wecare.R;
 import com.antrromet.wecare.adapters.NgoAdapter;
 import com.antrromet.wecare.interfaces.OnVolleyResponseListener;
@@ -182,7 +182,7 @@ public class NgosFragment extends BaseFragment implements OnVolleyResponseListen
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        startActivity(new Intent(getActivity(), CampaignDetailActivity.class).putExtra(Constants
+        startActivity(new Intent(getActivity(), NgoDetailActivity.class).putExtra(Constants
                 .ParamsKeys._ID.key, mNgos.get(position).getId()).putExtra(Constants
                 .ParamsKeys.NAME.key, mNgos.get(position).getName()).putExtra(Constants
                 .ParamsKeys.IMG.key, mNgos.get(position).getImg()));

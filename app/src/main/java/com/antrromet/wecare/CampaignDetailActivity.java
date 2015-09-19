@@ -128,7 +128,7 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
                     null);
         } else if (id == Constants.Loaders.CONTACTS.id) {
             return new CursorLoader(this, DBProvider.URI_CONTACTS,
-                    null, DBOpenHelper.COLUMN_CAMPAIGN_ID + " = ?", new String[]{mCampaignId},
+                    null, DBOpenHelper.COLUMN_ID + " = ?", new String[]{mCampaignId},
                     null);
         }
         return null;
@@ -183,8 +183,8 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
         } else if (loader.getId() == Constants.Loaders.CONTACTS.id) {
             if (data != null && data.moveToFirst()) {
                 Contact contact = new Contact();
-                contact.setCampaignId(data.getString(data.getColumnIndex(DBOpenHelper
-                        .COLUMN_CAMPAIGN_ID)));
+                contact.setId(data.getString(data.getColumnIndex(DBOpenHelper
+                        .COLUMN_ID)));
                 contact.setWebsite(data.getString(data.getColumnIndex(DBOpenHelper
                         .COLUMN_WEBSITE)));
                 contact.setEmail(data.getString(data.getColumnIndex(DBOpenHelper
@@ -268,7 +268,7 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
         if (contactObject != null) {
             Contact contact = new Contact();
             ContentValues contactValues = new ContentValues();
-            contactValues.put(DBOpenHelper.COLUMN_CAMPAIGN_ID, values.getAsString(DBOpenHelper
+            contactValues.put(DBOpenHelper.COLUMN_ID, values.getAsString(DBOpenHelper
                     .COLUMN_ID));
             contactValues.put(DBOpenHelper.COLUMN_WEBSITE, JSONUtils.optString(contactObject,
                     Constants.ParamsKeys.WEBSITE.key));
@@ -349,7 +349,7 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
      * @param values  content values with the contact data
      */
     private void setContactValues(Contact contact, ContentValues values) {
-        contact.setCampaignId(values.getAsString(DBOpenHelper.COLUMN_CAMPAIGN_ID));
+        contact.setId(values.getAsString(DBOpenHelper.COLUMN_ID));
         contact.setWebsite(values.getAsString(DBOpenHelper.COLUMN_WEBSITE));
         contact.setEmail(values.getAsString(DBOpenHelper.COLUMN_EMAIL));
         contact.setFbLink(values.getAsString(DBOpenHelper.COLUMN_FB_LINK));

@@ -11,13 +11,12 @@
         android:id="@+id/title_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/activities"
         android:textColor="@android:color/black"
         android:textSize="22sp"
         android:textStyle="bold"/>
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/activities_recyclerview"
+        android:id="@+id/tile_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"

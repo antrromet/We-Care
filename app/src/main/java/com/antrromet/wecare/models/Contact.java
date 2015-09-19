@@ -5,18 +5,18 @@ package com.antrromet.wecare.models;
  */
 public class Contact {
 
-    private String campaignId;
+    private String id;
     private String website;
     private String email;
     private String fbLink;
     private String twitterLink;
 
-    public String getCampaignId() {
-        return campaignId;
+    public String getId() {
+        return id;
     }
 
-    public void setCampaignId(String campaignId) {
-        this.campaignId = campaignId;
+    public void setId(String campaignId) {
+        this.id = campaignId;
     }
 
     public String getWebsite() {

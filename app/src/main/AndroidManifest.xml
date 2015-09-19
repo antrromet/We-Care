@@ -29,6 +29,10 @@
             android:screenOrientation="portrait"/>
 
         <activity
+            android:name=".NgoDetailActivity"
+            android:screenOrientation="portrait"/>
+
+        <activity
             android:name=".WebViewActivity"
             android:screenOrientation="portrait"/>
 

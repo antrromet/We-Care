@@ -48,7 +48,8 @@ public class Constants {
         MISSION("mission"), ABOUT("about"), ACTIVITIES("activities"), DESC("desc"), TITLE
                 ("title"), CONTACT("contact"), WEBSITE("website"), EMAIL("email"), FB_LINK
                 ("fb_link"), TW_LINK("tw_link"), METADATA("metadata"), STARTS_ON("startsOn"),
-        ENDS_ON("endsOn"), PROGRESS("progress"), SUB_TITLE("subTitle"), CAMPAIGNS("campaigns");
+        ENDS_ON("endsOn"), PROGRESS("progress"), SUB_TITLE("subTitle"), CAMPAIGNS("campaigns"),
+        JOINED("joined"), FOUNDER("founder");
 
         public final String key;
 

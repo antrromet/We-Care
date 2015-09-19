@@ -15,5 +15,9 @@
     <string name="ends_on">Ends On</string>
     <string name="about">About</string>
     <string name="duration">Duration</string>
+    <string name="joined">Joined : %s</string>
+    <string name="founder">Founder : %s</string>
+    <string name="campaigns">Campaigns</string>
+    <string name="mission">Mission : %s</string>
 
 </resources>
