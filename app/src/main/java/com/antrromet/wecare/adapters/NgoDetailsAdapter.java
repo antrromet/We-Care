@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -110,10 +111,20 @@ public class NgoDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                         .website, mNgo.getContact().getWebsite()));
                 ((ContactViewHolder) holder).emailText.setText(mContext.getString(R.string
                         .email, mNgo.getContact().getEmail()));
-                ((ContactViewHolder) holder).facebookText.setText(mContext.getString(R.string
-                        .facebook, mNgo.getContact().getFbLink()));
-                ((ContactViewHolder) holder).twitterText.setText(mContext.getString(R.string
-                        .twitter, mNgo.getContact().getTwitterLink()));
+                String facebookLink =mNgo.getContact().getFbLink();
+                if (TextUtils.isEmpty(facebookLink)) {
+                    ((ContactViewHolder) holder).facebookText.setVisibility(View.GONE);
+                } else {
+                    ((ContactViewHolder) holder).facebookText.setText( mContext.getString(R.string
+                            .facebook, facebookLink));
+                }
+                String twitterLink = mNgo.getContact().getTwitterLink();
+                if (TextUtils.isEmpty(twitterLink)) {
+                    ((ContactViewHolder) holder).twitterText.setVisibility(View.GONE);
+                } else {
+                    ((ContactViewHolder) holder).twitterText.setText(mContext.getString(R.string
+                            .twitter, twitterLink));
+                }
                 break;
             }
         }

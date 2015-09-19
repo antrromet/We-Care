@@ -127,6 +127,7 @@ public class NgosFragment extends BaseFragment implements OnVolleyResponseListen
                 setNgoValues(ngo, value);
                 mNgos.add(ngo);
             }
+            getActivity().getContentResolver().delete(DBProvider.URI_NGOS, null, null);
             getActivity().getContentResolver().bulkInsert(DBProvider.URI_NGOS,
                     values);
         }

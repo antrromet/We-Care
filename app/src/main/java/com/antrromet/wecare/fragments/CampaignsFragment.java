@@ -129,6 +129,7 @@ public class CampaignsFragment extends BaseFragment implements OnVolleyResponseL
                 setCampaignValues(campaign, value);
                 mCampaigns.add(campaign);
             }
+            getActivity().getContentResolver().delete(DBProvider.URI_CAMPAIGNS, null, null);
             getActivity().getContentResolver().bulkInsert(DBProvider.URI_CAMPAIGNS,
                     values);
         }
