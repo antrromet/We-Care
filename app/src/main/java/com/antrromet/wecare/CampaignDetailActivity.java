@@ -51,7 +51,6 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
     private CampaignDetail mCampaign;
     private ImageLoader mImageLoader;
     private CampaignDetailsAdapter mCampaignDetailsAdapter;
-    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,11 +99,6 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
         campaignRecyclerView.setItemAnimator(new DefaultItemAnimator());
         campaignRecyclerView.setAdapter(mCampaignDetailsAdapter);
 
-        // Setting up the Refresh Layout
-        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.primary, R.color.accent,
-                R.color.primary, R.color.accent);
     }
 
     private void setAppBarLayoutHeight() {
@@ -217,7 +211,6 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
 
     @Override
     public void OnSuccess(Constants.VolleyTags tag, Object responseObject) {
-        mSwipeRefreshLayout.setRefreshing(false);
         insertCampaignDetailsInDB((JSONObject) responseObject);
         setDataToViews();
     }
