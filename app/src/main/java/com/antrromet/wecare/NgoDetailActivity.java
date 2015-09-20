@@ -305,7 +305,7 @@ public class NgoDetailActivity extends BaseActivity implements LoaderManager
         }
         values.put(DBOpenHelper.COLUMN_MISSION, JSONUtils.optString(responseObject, Constants
                 .ParamsKeys.MISSION.key));
-        values.put(DBOpenHelper.COLUMN_URL, JSONUtils.optString(responseObject, Constants
+        values.put(DBOpenHelper.COLUMN_URL, Constants.BASE_URL + JSONUtils.optString(responseObject, Constants
                 .ParamsKeys.URL.key));
         getContentResolver().insert(DBProvider.URI_NGO_DETAILS, values);
         setNgoDetailsValues(values);
