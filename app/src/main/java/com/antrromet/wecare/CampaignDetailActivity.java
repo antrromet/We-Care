@@ -45,7 +45,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CampaignDetailActivity extends BaseActivity implements LoaderManager
-        .LoaderCallbacks<Cursor>, OnVolleyResponseListener, OnClickListener, CampaignDetailsAdapter.OnWebLinkClickListener, SwipeRefreshLayout.OnRefreshListener{
+        .LoaderCallbacks<Cursor>, OnVolleyResponseListener, OnClickListener, CampaignDetailsAdapter.OnWebLinkClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     private String mCampaignId;
     private CampaignDetail mCampaign;
@@ -259,6 +259,9 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
                             (activityJsonObject, Constants.ParamsKeys.TITLE.key));
                     setActivityValues(activity, activityValues);
                     mCampaignActivities.add(activity);
+                    getContentResolver().delete(DBProvider.URI_ACTIVITIES, DBOpenHelper
+                            .COLUMN_CAMPAIGN_ID + " = ?", new String[]{values.getAsString
+                            (DBOpenHelper.COLUMN_ID)});
                     getContentResolver().insert(DBProvider.URI_ACTIVITIES, activityValues);
                 }
             }
