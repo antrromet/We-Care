@@ -11,7 +11,6 @@
         android:id="@+id/founder_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:visibility="gone"
         android:layout_marginBottom="5dp"
         android:textColor="@color/light_grey"
         android:textSize="18sp"/>

@@ -92,7 +92,6 @@ public class NgoDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
                 ((AboutViewHolder) holder).titleText.setText(mNgo.getName());
                 ((AboutViewHolder) holder).founderText.setText(mContext.getString(R.string
                         .founder, mNgo.getFounder()));
-                ((AboutViewHolder) holder).founderText.setVisibility(View.VISIBLE);
                 ((AboutViewHolder) holder).missionText.setText(mContext.getString(R.string
                         .mission, mNgo.getMission()));
                 ((AboutViewHolder) holder).missionText.setVisibility(View.VISIBLE);

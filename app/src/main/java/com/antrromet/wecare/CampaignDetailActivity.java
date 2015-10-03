@@ -34,7 +34,6 @@ import com.antrromet.wecare.models.Contact;
 import com.antrromet.wecare.provider.DBOpenHelper;
 import com.antrromet.wecare.provider.DBProvider;
 import com.antrromet.wecare.utils.JSONUtils;
-import com.antrromet.wecare.utils.Logger;
 import com.antrromet.wecare.widgets.MyLinearLayoutManager;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -45,7 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CampaignDetailActivity extends BaseActivity implements LoaderManager
-        .LoaderCallbacks<Cursor>, OnVolleyResponseListener, OnClickListener, CampaignDetailsAdapter.OnWebLinkClickListener, SwipeRefreshLayout.OnRefreshListener {
+        .LoaderCallbacks<Cursor>, OnVolleyResponseListener, OnClickListener, CampaignDetailsAdapter.OnWebLinkClickListener, SwipeRefreshLayout.OnRefreshListener, CampaignDetailsAdapter.OnNgoClickListener {
 
     private String mCampaignId;
     private CampaignDetail mCampaign;
@@ -90,6 +89,7 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
 
         mCampaignDetailsAdapter = new CampaignDetailsAdapter(this);
         mCampaignDetailsAdapter.setOnWebLinkClickListener(this);
+        mCampaignDetailsAdapter.setOnNgoClickListener(this);
         RecyclerView campaignRecyclerView = (RecyclerView) findViewById(R.id
                 .campaign_detail_recycler_view);
         campaignRecyclerView.setHasFixedSize(true);
@@ -98,17 +98,16 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
         campaignRecyclerView.setLayoutManager(mLayoutManager);
         campaignRecyclerView.setItemAnimator(new DefaultItemAnimator());
         campaignRecyclerView.setAdapter(mCampaignDetailsAdapter);
-
     }
 
     private void setAppBarLayoutHeight() {
-        AppBarLayout mAppBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mAppBarLayout.getLayoutParams();
+        final AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) appBarLayout.getLayoutParams();
         Display display = getWindowManager().getDefaultDisplay();
         Point size = new Point();
         display.getSize(size);
         params.height = size.x;
-        mAppBarLayout.setLayoutParams(params);
+        appBarLayout.setLayoutParams(params);
     }
 
     /**
@@ -158,7 +157,6 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
                         .COLUMN_SHORT_DESC)));
                 mCampaign.setSubTitle(data.getString(data.getColumnIndex(DBOpenHelper.COLUMN_SUB_TITLE)));
                 mCampaign.setUrl(data.getString(data.getColumnIndex(DBOpenHelper.COLUMN_URL)));
-                Logger.d(TAG, "Loaded campaign object");
             }
         } else if (loader.getId() == Constants.Loaders.ACTIVITIES.id) {
             if (data != null && data.moveToFirst()) {
@@ -179,7 +177,6 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
                 } while (data.moveToNext());
                 mCampaign.setActivities(activities);
             }
-            Logger.d(TAG, "Loaded activities");
             getSupportLoaderManager().restartLoader(Constants.Loaders.CONTACTS.id,
                     null, this);
         } else if (loader.getId() == Constants.Loaders.CONTACTS.id) {
@@ -197,7 +194,6 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
                         .COLUMN_FB_LINK)));
                 mCampaign.setContact(contact);
             }
-            Logger.d(TAG, "Loaded contacts");
             if (mCampaign != null) {
                 setDataToViews();
             }
@@ -424,5 +420,13 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
     @Override
     public void onRefresh() {
         requestCampaignDetail();
+    }
+
+    @Override
+    public void onNgoClick(View view, String id, String name) {
+        startActivity(new Intent(this, NgoDetailActivity.class).putExtra(Constants
+                .ParamsKeys._ID.key, id).putExtra(Constants
+                .ParamsKeys.NAME.key, name).putExtra(Constants
+                .ParamsKeys.IMG.key, ""));
     }
 }

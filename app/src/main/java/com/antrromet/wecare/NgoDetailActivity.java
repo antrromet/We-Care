@@ -34,7 +34,6 @@ import com.antrromet.wecare.models.NgoDetail;
 import com.antrromet.wecare.provider.DBOpenHelper;
 import com.antrromet.wecare.provider.DBProvider;
 import com.antrromet.wecare.utils.JSONUtils;
-import com.antrromet.wecare.utils.Logger;
 import com.antrromet.wecare.widgets.MyLinearLayoutManager;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -154,7 +153,6 @@ public class NgoDetailActivity extends BaseActivity implements LoaderManager
                 mNgo.setJoined(data.getString(data.getColumnIndex(DBOpenHelper.COLUMN_JOINED)));
                 mNgo.setFounder(data.getString(data.getColumnIndex(DBOpenHelper.COLUMN_FOUNDER)));
                 mNgo.setUrl(data.getString(data.getColumnIndex(DBOpenHelper.COLUMN_URL)));
-                Logger.d(TAG, "Loaded ngo object");
             }
         } else if (loader.getId() == Constants.Loaders.CAMPAIGNS.id) {
             if (data != null && data.moveToFirst()) {
@@ -178,7 +176,6 @@ public class NgoDetailActivity extends BaseActivity implements LoaderManager
                 } while (data.moveToNext());
                 mNgo.setCampaigns(campaigns);
             }
-            Logger.d(TAG, "Loaded campaigns");
             getSupportLoaderManager().restartLoader(Constants.Loaders.CONTACTS.id,
                     null, this);
         } else if (loader.getId() == Constants.Loaders.CONTACTS.id) {
@@ -196,7 +193,6 @@ public class NgoDetailActivity extends BaseActivity implements LoaderManager
                         .COLUMN_FB_LINK)));
                 mNgo.setContact(contact);
             }
-            Logger.d(TAG, "Loaded contacts");
             if (mNgo != null) {
                 setDataToViews();
             }

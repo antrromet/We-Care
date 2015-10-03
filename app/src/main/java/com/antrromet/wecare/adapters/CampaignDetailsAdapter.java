@@ -4,7 +4,9 @@ import android.content.Context;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.SpannableString;
 import android.text.TextUtils;
+import android.text.style.UnderlineSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ import java.util.Locale;
 public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private OnWebLinkClickListener mOnWebLinkClickListener;
+    private OnNgoClickListener mOnNgoClickListener;
     private CampaignDetail mCampaign;
     private Context mContext;
 
@@ -89,6 +92,10 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
                             .getDefault());
                     ((AboutViewHolder) holder).durationText.setText(dateFormatter.format(startDate)
                             + " - " + dateFormatter.format(endDate));
+                    SpannableString ngo = new SpannableString(mContext.getString(R.string
+                            .ngo, mCampaign.getNgoName()));
+                    ngo.setSpan(new UnderlineSpan(), 6, ngo.length(), 0);
+                    ((AboutViewHolder) holder).founderText.setText(ngo);
                 } catch (ParseException e) {
                     e.printStackTrace();
                     ((AboutViewHolder) holder).durationText.setText("");
@@ -138,8 +145,16 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
         mOnWebLinkClickListener = onWebLinkClickListener;
     }
 
+    public void setOnNgoClickListener(OnNgoClickListener onNgoClickListener) {
+        mOnNgoClickListener = onNgoClickListener;
+    }
+
     public interface OnWebLinkClickListener {
         void onWebLinkClick(View view, String link);
+    }
+
+    public interface OnNgoClickListener {
+        void onNgoClick(View view, String id, String name);
     }
 
     public class ActivitiesViewHolder extends RecyclerView.ViewHolder {
@@ -165,19 +180,26 @@ public class CampaignDetailsAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     }
 
-    public class AboutViewHolder extends RecyclerView.ViewHolder {
+    public class AboutViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private TextView durationText;
         private TextView titleText;
         private TextView aboutText;
+        private TextView founderText;
 
         public AboutViewHolder(View view) {
             super(view);
             durationText = (TextView) view.findViewById(R.id.duration_text);
             titleText = (TextView) view.findViewById(R.id.title_text);
             aboutText = (TextView) view.findViewById(R.id.about_text);
+            founderText = (TextView) view.findViewById(R.id.founder_text);
+            founderText.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View v) {
+            mOnNgoClickListener.onNgoClick(v, mCampaign.getNgoId(), mCampaign.getNgoName());
+        }
     }
 
     public class ProgressViewHolder extends RecyclerView.ViewHolder {

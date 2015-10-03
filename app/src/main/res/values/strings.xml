@@ -17,6 +17,7 @@
     <string name="duration">Duration</string>
     <string name="joined">Joined : %s</string>
     <string name="founder">Founder : %s</string>
+    <string name="ngo">NGO : %s</string>
     <string name="campaigns">Campaigns</string>
     <string name="mission">Mission : %s</string>
 

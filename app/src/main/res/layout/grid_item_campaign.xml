@@ -24,15 +24,22 @@
             android:minWidth="50dp"
             android:scaleType="fitXY"/>
 
+        <View
+            android:id="@+id/poster_divider"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_below="@+id/poster_image"
+            android:background="@color/divider"/>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/poster_image"
+            android:layout_below="@+id/poster_divider"
             android:orientation="vertical"
+            android:paddingBottom="10dp"
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp">
+            android:paddingTop="10dp">
 
             <TextView
                 android:id="@+id/title_text"
