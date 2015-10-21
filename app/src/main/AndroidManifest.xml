@@ -41,6 +41,9 @@
             android:authorities="com.antrromet.wecare.provider"
             android:exported="false"/>
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="c6ff46f11cd748bc2a5889125f5425fee2ac39e7" />
     </application>
 
 </manifest>

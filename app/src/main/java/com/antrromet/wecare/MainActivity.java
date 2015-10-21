@@ -3,12 +3,11 @@ package com.antrromet.wecare;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.antrromet.wecare.adapters.MainActivityPagerAdapter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +49,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
+                if (position == 0) {
+                    setScreenName(getString(R.string.campaigns));
+                } else if (position == 1) {
+                    setScreenName(getString(R.string.ngos));
+                }
                 if (mScrollState != ViewPager.SCROLL_STATE_IDLE) {
                     tabLayout.setScrollPosition(mScrollPosition, mScrollOffset, true);
                 }

@@ -75,10 +75,11 @@ public class CampaignDetailActivity extends BaseActivity implements LoaderManage
         }
 
         CollapsingToolbarLayout mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        mCollapsingToolbar.setTitle(getIntent().getStringExtra(Constants.ParamsKeys.NAME.key));
+        String title = getIntent().getStringExtra(Constants.ParamsKeys.NAME.key);
+        mCollapsingToolbar.setTitle(title);
         mCollapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color
                 .transparent));
-
+        setScreenName(getString(R.string.campaigns) + " - " + title);
         // Load the local cached data
         getSupportLoaderManager().restartLoader(Constants.Loaders.CAMPAIGN_DETAILS.id,
                 null, this);

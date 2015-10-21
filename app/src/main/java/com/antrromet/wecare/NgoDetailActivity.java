@@ -76,7 +76,9 @@ public class NgoDetailActivity extends BaseActivity implements LoaderManager
         }
 
         CollapsingToolbarLayout mCollapsingToolbar = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        mCollapsingToolbar.setTitle(getIntent().getStringExtra(Constants.ParamsKeys.NAME.key));
+        String title = getIntent().getStringExtra(Constants.ParamsKeys.NAME.key);
+        mCollapsingToolbar.setTitle(title);
+        setScreenName(getString(R.string.ngos) + " - " + title);
         mCollapsingToolbar.setExpandedTitleColor(ContextCompat.getColor(this, android.R.color
                 .transparent));
 

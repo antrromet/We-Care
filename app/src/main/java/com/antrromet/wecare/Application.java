@@ -9,11 +9,16 @@ import android.os.StatFs;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.crashlytics.android.Crashlytics;
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.util.ArrayList;
+
+import io.fabric.sdk.android.Fabric;
 
 public class Application extends android.app.Application {
 
@@ -21,6 +26,7 @@ public class Application extends android.app.Application {
 
     private static RequestQueue mRequestQueue;
     private static ArrayList<Constants.VolleyTags> mRequestTags;
+    private Tracker mTracker;
 
     public static RequestQueue getRequestQueue() {
         return mRequestQueue;
@@ -95,9 +101,18 @@ public class Application extends android.app.Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
         mRequestQueue = Volley.newRequestQueue(getApplicationContext());
         mRequestTags = new ArrayList<>();
         initImageLoader(getApplicationContext());
+    }
+
+    synchronized public Tracker getDefaultTracker() {
+        if (mTracker == null) {
+            GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+            mTracker = analytics.newTracker(R.xml.global_tracker);
+        }
+        return mTracker;
     }
 
 }

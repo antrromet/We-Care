@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -24,6 +25,8 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.antrromet.wecare.interfaces.OnVolleyResponseListener;
 import com.antrromet.wecare.utils.Logger;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -36,10 +39,13 @@ public class BaseActivity extends AppCompatActivity {
 
     protected static final String TAG = BaseActivity.class.getSimpleName();
     private OnVolleyResponseListener mVolleyListener;
+    private Tracker mTracker;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Application application = (Application) getApplication();
+        mTracker = application.getDefaultTracker();
     }
 
     /**
@@ -197,6 +203,12 @@ public class BaseActivity extends AppCompatActivity {
                         .setVisibility(View.GONE);
             }
         }
+    }
+
+    protected void setScreenName(String name) {
+        Log.i(TAG, "Setting screen name: " + name);
+        mTracker.setScreenName(name);
+        mTracker.send(new HitBuilders.ScreenViewBuilder().build());
     }
 
 }
