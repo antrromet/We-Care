@@ -5,6 +5,7 @@ public class Constants {
     // App preferences stored in this file
     public static final String APP_PREFERENCES = "app_preferences";
     public static final String BASE_URL = "https://wecare-ghci.rhcloud.com";
+    public static final int RETRY_TIME = 20000;
 
     /**
      * Enum for holding the tags for each Volley Request
