@@ -159,7 +159,7 @@ public class BaseActivity extends AppCompatActivity {
                 }
             });
             // Wait for 20s because this can be a long request
-            jsonObjRequest.setRetryPolicy(new DefaultRetryPolicy(20000,
+            jsonObjRequest.setRetryPolicy(new DefaultRetryPolicy(Constants.RETRY_TIME,
                     DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                     DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
             // Adding request to request queue
